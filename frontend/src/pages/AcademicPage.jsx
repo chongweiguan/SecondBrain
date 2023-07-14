@@ -17,19 +17,19 @@ const AcademicPage = () => {
         <hr className="line-break" />
         <div style={{ textAlign: 'center' }}>
           <p style={{
-              fontSize: '50px',
+              fontSize: '40px',
               fontWeight: '700',
-              padding: '15px'
+              padding: '5px'
             }}>
               AY2023/2024, Semester 1, Week 2
           </p>
           <p style={{
-              fontSize: '30px',
+              fontSize: '22px',
             }}>
               Modules: CS2102 CS2105
           </p>
         </div>
-        <div style={{padding: '80px 10px 80px 10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
+        <div style={{padding: '50px 10px 80px 10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
           <AssignmentBox />
           <ExamBox />
         </div>

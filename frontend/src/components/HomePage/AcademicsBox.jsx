@@ -8,11 +8,11 @@ const AcademicBox = () => {
         <header className="home-page-box-header">
           <Link to="/academics">📔 Academics</Link>
         </header>
-        <p className="home-page-box-subheader text-center">Summer Break</p>
+        <p className="home-page-box-subheader text-center">AY2023/2024, Semester 1</p>
         <p className="home-page-box-subheader" style={{padding: '5px'}}>Assignments</p>
         <div className='scroll-container' style={{
-          height: '248px',
-          width: '610px'
+          height: '192px',
+          width: '405px'
         }}>
           <div className='scroll-container-element-container'>
             <div className="scroll-container-element" style={{width: '180px', color: '#a3a3a3'}}>Task</div>
@@ -29,8 +29,8 @@ const AcademicBox = () => {
         </div>
         <p className="home-page-box-subheader" style={{padding: '15px 5px 5px 5px'}}>Exams</p>
         <div className='scroll-container' style={{
-          height: '248px',
-          width: '610px'
+          height: '192px',
+          width: '405px'
         }}>
           <div className='scroll-container-element-container'>
             <div className="scroll-container-element" style={{width: '180px', color: '#a3a3a3'}}>Exam</div>

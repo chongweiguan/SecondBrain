@@ -17,7 +17,7 @@ const HomePage = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsSmallScreen(window.innerWidth <= 1500);
+      setIsSmallScreen(window.innerWidth <= 1350);
     };
     window.addEventListener('resize', handleResize);
     handleResize();
@@ -66,7 +66,7 @@ const HomePage = () => {
         </div>
       <hr className="line-break"/>
       <div style={{
-        padding: '50px', 
+        padding: '30px', 
         display:'flex',
         justifyContent: 'center',
         alignItems: 'center',

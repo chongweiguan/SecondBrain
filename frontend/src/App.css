@@ -4,9 +4,9 @@ p, h1, h2, h3, h4 {
 
 .page-header {
   color: white;
-  margin-top: 70px;
+  margin-top: 40px;
   margin-left: 70px;
-  font-size: 60px;
+  font-size: 40px;
   font-weight: bold;
 }
 
@@ -32,47 +32,47 @@ p, h1, h2, h3, h4 {
 
 .pop-up-header {
   color: white;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: 550
 }
 
 .pop-up-subheader {
   color: rgb(150, 150, 150);
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .academic-page-box-container {
   background-color: black;
-  width: 1000px;
-  height: 810px;
+  width: 650px;
+  height: 617px;
   border-radius: 10px;
-  padding: 40px 40px;
+  padding: 25px 30px;
   border: 2px solid #333333;
 }
 
 .academic-page-box-header {
   color: white;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 550
 }
 
 .academic-page-box-subheader {
   color: rgb(150, 150, 150);
-  font-size: 25px;
+  font-size: 17px;
 }
 
 .home-page-box-container {
   background-color: black;
-  width: 670px;
-  height: 800px;
+  width: 440px;
+  height: 600px;
   border-radius: 10px;
-  padding: 25px;
+  padding: 15px;
   border: 2px solid #333333;
 }
 
 .home-page-box-header {
   color: rgb(150, 150, 150);
-  font-size: 50px;
+  font-size: 35px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,7 +86,7 @@ p, h1, h2, h3, h4 {
 
 .home-page-box-subheader {
   color: white;
-  font-size: 30px;
+  font-size: 20px;
   padding: 4px 20px;
 }
 
@@ -101,14 +101,14 @@ p, h1, h2, h3, h4 {
 }
 
 .progress-bar-border {
-  border: 2px solid white;
+  border: 1px solid white;
   border-radius: 5px;
   background: transparent;
-  padding: 5px;
+  padding: 3px;
 }
 
 .progress-bar {
-  height: 25px;
+  height: 16px;
   border-radius: 3px;
 }
 
@@ -163,8 +163,8 @@ p, h1, h2, h3, h4 {
   display: flex;
   justify-content: start;
   align-items: center;
-  font-size: 19px;
-  padding: 10px;
+  font-size: 13px;
+  padding: 5px;
   transition: background-color 0.3s;
   overflow: hidden;
 }

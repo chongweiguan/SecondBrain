@@ -23,18 +23,18 @@ const DaysCompleted = () => {
   return (
     <div>
       <div style={{ display: 'flex', padding: '5px 0px' }}>
-        <div className="progress-bar-border" style={{ width: '300px' }}>
+        <div className="progress-bar-border" style={{ width: '200px' }}>
           <div
             className="progress-bar"
             style={{ width: `${calculatePercentage(weekDaysCompleted, totalWeekDays)}%`, backgroundColor: 'white' }}
           />
         </div>
-        <p style={{ color: 'white', padding: '0px 10px' }}>
+        <p style={{ color: 'white', padding: '0px 10px'}}>
           Week: {weekDaysCompleted} / {totalWeekDays}
         </p>
       </div>
       <div style={{ display: 'flex', padding: '5px 0px' }}>
-        <div className="progress-bar-border" style={{ width: '300px' }}>
+        <div className="progress-bar-border" style={{ width: '200px' }}>
           <div
             className="progress-bar"
             style={{ width: `${calculatePercentage(monthDaysCompleted, totalMonthDays)}%`, backgroundColor: 'white' }}
@@ -45,7 +45,7 @@ const DaysCompleted = () => {
         </p>
       </div>
       <div style={{ display: 'flex', padding: '5px 0px' }}>
-        <div className="progress-bar-border" style={{ width: '300px' }}>
+        <div className="progress-bar-border" style={{ width: '200px' }}>
           <div
             className="progress-bar"
             style={{ width: `${calculatePercentage(yearDaysCompleted, totalYearDays)}%`, backgroundColor: 'white' }}

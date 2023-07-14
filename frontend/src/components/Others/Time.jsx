@@ -17,7 +17,7 @@ const Time = () => {
     <div>
       <p style={{
         color: 'white',
-        fontSize:'60px',
+        fontSize:'50px',
         fontWeight:'500'
       }}>{time}</p>
     </div>

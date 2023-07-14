@@ -26,15 +26,15 @@ const Weather = () => {
     }
   
     return (
-      <div style={{display: 'flex'}}>
-        <div style={{marginRight: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-          <p style={{color:'white', fontSize:'35px', fontWeight:'650'}}>SINGAPORE</p>
-          <p style={{color:'white', fontSize:'25px'}}>WEATHER</p>
+      <div style={{display: 'flex', gap: '50px'}}>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+          <p style={{color:'white', fontSize:'30px', fontWeight:'650'}}>SINGAPORE</p>
+          <p style={{color:'white', fontSize:'20px'}}>WEATHER</p>
         </div>
         <p style={{fontSize:'35px', marginTop:'20px'}}>⛅</p>
-        <div style={{marginLeft: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-          <p style={{color:'white', fontSize:'40px', fontWeight:'650'}}>{(weatherData.main.temp - 273.15).toFixed(1)}°C</p>
-          <p style={{color:'white', fontSize:'25px'}}>{weatherData.weather[0].main}</p>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+          <p style={{color:'white', fontSize:'30px', fontWeight:'650'}}>{(weatherData.main.temp - 273.15).toFixed(1)}°C</p>
+          <p style={{color:'white', fontSize:'20px'}}>{weatherData.weather[0].main}</p>
         </div>
       </div>
     )

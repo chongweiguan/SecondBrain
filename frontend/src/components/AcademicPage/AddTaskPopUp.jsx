@@ -48,9 +48,9 @@ const AddTaskPopUp = ({ onClose }) => {
 
   return (
     <div className='pop-up-container' style={{
-      padding: '50px 50px',
-      height:'470px',
-      width: '750px',
+      padding: '30px 30px',
+      height:'350px',
+      width: '550px',
       position: "absolute",
       top: "120%",
       left: "50%",
@@ -59,7 +59,7 @@ const AddTaskPopUp = ({ onClose }) => {
       <p className='pop-up-header'>Add Task</p>
       <p className='pop-up-subheader'>Add new assignments here. Click Add when you are done.</p>
       <div style={{
-        height: '200px', 
+        height: '150px', 
         display:'flex', 
         justifyContent: 'center', 
         alignItems: 'center',
@@ -68,28 +68,28 @@ const AddTaskPopUp = ({ onClose }) => {
         <div 
           style={{
             display:'flex', 
-            gap: '20px', 
+            gap: '15px', 
             alignItems: 'center', 
             padding: '30px 0px 30px 0px'
           }}>
-          <p style={{fontSize:'22px', fontWeight: '520'}}>Task</p>
+          <p style={{fontSize:'18px', fontWeight: '520'}}>Task</p>
           <input
-            type="text" name="" required className="inputField" style={{width: '560px', height: '55px'}}
+            type="text" name="" required className="inputField" style={{width: '435px', height: '35px', fontSize: '17px'}}
           />
         </div>
-        <div style={{display: 'flex', gap: '30px'}}>
+        <div style={{display: 'flex', gap: '20px'}}>
           <div 
             style={{
               display:'flex', 
-              gap: '20px', 
+              gap: '15px', 
               alignItems: 'center', 
             }}>
-            <p style={{fontSize:'22px', fontWeight: '520'}}>Date</p>
+            <p style={{fontSize:'18px', fontWeight: '520'}}>Date</p>
             <Button
               onClick={handleShowDatePicker}
               sx={{
-                width:'260px',
-                height: '45px',
+                width:'195px',
+                height: '35px',
                 color: 'white', 
                 border: '1px solid grey', 
                 borderRadius: '5px', 
@@ -102,7 +102,7 @@ const AddTaskPopUp = ({ onClose }) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
             }}>{selectedDate && <p style={{fontSize: '17px'}}>{selectedDate}</p>}
-              <CalendarMonthIcon />
+              <CalendarMonthIcon sx={{fontSize:'17px'}}/>
             </Button>
             {showDatePicker && (
               <div className='pop-up-overlay' onClick={handleCloseDatePicker}>
@@ -121,15 +121,15 @@ const AddTaskPopUp = ({ onClose }) => {
           <div 
             style={{
               display:'flex', 
-              gap: '20px', 
+              gap: '15px', 
               alignItems: 'center', 
             }}>
-            <p style={{fontSize:'22px', fontWeight: '520'}}>Time</p>
+            <p style={{fontSize:'18px', fontWeight: '520'}}>Time</p>
             <Button 
               onClick={handleShowTimePicker}
               sx={{
-                width:'200px',
-                height: '45px',
+                width:'155px',
+                height: '35px',
                 color: 'white', 
                 border: '1px solid grey', 
                 borderRadius: '5px', 
@@ -162,15 +162,15 @@ const AddTaskPopUp = ({ onClose }) => {
           </div>
         </div>
       </div>
-      <div style={{marginTop: '20px', width: '640px', display: 'flex', justifyContent: 'flex-end', gap: '15px' }}>
+      <div style={{marginTop: '35px', width: '490px', display: 'flex', justifyContent: 'flex-end', gap: '15px' }}>
         <Button
           sx={{
-            width: '120px',
-            fontSize: '25px',
+            width: '100px',
+            fontSize: '17px',
             color: 'white', 
             border: '1px solid #5A5A5A', 
             borderRadius: '10px', 
-            padding: '8px 12px', 
+            padding: '5px 8px', 
             textTransform: 'none',
             '&:hover': {
               backgroundColor: '#333333'
@@ -182,12 +182,12 @@ const AddTaskPopUp = ({ onClose }) => {
           sx={{
             fontWeight: '600',
             backgroundColor: '#B6B6B6',
-            width: '100px',
-            fontSize: '25px',
+            width: '80x',
+            fontSize: '17px',
             color: 'black', 
             border: '1px solid #5A5A5A', 
             borderRadius: '10px', 
-            padding: '8px 12px', 
+            padding: '5px 8px', 
             textTransform: 'none',
             '&:hover': {
               backgroundColor: 'white'

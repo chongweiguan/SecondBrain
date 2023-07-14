@@ -5,7 +5,7 @@ const CurrentDay = () => {
   
     return <p style={{
       color: 'white',
-      fontSize:'30px',
+      fontSize:'25px',
       fontWeight:'500'
     }}>{currentDay}</p>;
   };
