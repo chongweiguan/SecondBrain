@@ -2,6 +2,10 @@ p, h1, h2, h3, h4 {
   color: white;
 }
 
+/*div {
+  border: 1px solid green
+}*/
+
 .page-header {
   color: white;
   margin-top: 40px;
@@ -18,7 +22,7 @@ p, h1, h2, h3, h4 {
 
 .line-break {
   margin: 50px 70px 50px 70px;
-  background-color: #1E1E1E;
+  background-color: #282828;
   height: 2px;
   border: none 
 } 
@@ -114,7 +118,7 @@ p, h1, h2, h3, h4 {
 
 .black-background {
   background-color: black;
-  min-height: 100%;
+  min-height: 100vh;
 }
 
 .scroll-container {
@@ -210,4 +214,19 @@ p, h1, h2, h3, h4 {
 .pop-up-content {
   position: relative;
   z-index: 2;
+}
+
+.main-header {
+  font-size: 45px;
+  font-weight: 600;
+}
+
+.small-link {
+  font-size: 12px;
+  color: #CACACA;
+}
+
+.small-link:hover {
+  color: white;
+  font-weight: 500;
 }

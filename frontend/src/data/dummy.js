@@ -145,3 +145,90 @@ export const jobData = [
     remarks: 1
   },
 ];
+
+export const moduleData = [
+  {
+    id: 1,
+    moduleCode: 'CS1101S',
+    moduleDesc: 'Programming Methodology',
+    type: 'Core',
+    mc: 4
+  },
+  {
+    id: 2,
+    moduleCode: 'CS1231S',
+    moduleDesc: 'Discrete Structures',
+    type: 'Core',
+    mc: 4
+  },
+  {
+    id: 3,
+    moduleCode: 'CS2030S',
+    moduleDesc: 'Programming Methodology II',
+    type: 'Core',
+    mc: 4
+  },
+  {
+    id: 4,
+    moduleCode: 'CS2040S',
+    moduleDesc: 'Data Structures and Algorithms',
+    type: 'Core',
+    mc: 4
+  },
+  {
+    id: 5,
+    moduleCode: 'GEC1028',
+    moduleDesc: 'Luck',
+    type: 'General Elective',
+    mc: 4
+  },
+  {
+    id: 6,
+    moduleCode: 'GEA1000',
+    moduleDesc: 'Quantitative Reasoning With Data',
+    type: 'General Elective',
+    mc: 4
+  },
+  {
+    id: 7,
+    moduleCode: 'GESS1025',
+    moduleDesc: 'Programming Methodology II',
+    type: 'General Elective',
+    mc: 4
+  },
+  {
+    id: 8,
+    moduleCode: 'MA1301',
+    moduleDesc: 'Introductory Mathematics',
+    type: 'Unrestricted Elective',
+    mc: 4
+  },
+  {
+    id: 9,
+    moduleCode: 'CP2106',
+    moduleDesc: 'Orbital',
+    type: 'Unrestricted Elective',
+    mc: 4
+  },
+  {
+    id: 10,
+    moduleCode: 'CP3200',
+    moduleDesc: 'SIP',
+    type: 'Unrestricted Elective',
+    mc: 6
+  },
+  {
+    id: 11,
+    moduleCode: 'CS2105',
+    moduleDesc: 'Computer Network',
+    type: 'Breadth & Depth',
+    mc: 4
+  },
+  {
+    id: 12,
+    moduleCode: 'CS2102',
+    moduleDesc: 'Introduction to Databases',
+    type: 'Breadth & Depth',
+    mc: 4
+  },
+]

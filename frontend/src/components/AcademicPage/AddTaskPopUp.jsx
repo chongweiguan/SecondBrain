@@ -109,8 +109,8 @@ const AddTaskPopUp = ({ onClose }) => {
                 <div
                 style={{
                   position: "absolute",
-                  top: "-13%",
-                  left: '15%'
+                  top: "-45%",
+                  left: '2%'
                 }}
                 >
                   <Calendar onSelect={handleSelectDate} date={selectedDate} />
@@ -150,9 +150,9 @@ const AddTaskPopUp = ({ onClose }) => {
                 <div
                 style={{
                   position: "absolute",
-                  top: "9%",
-                  left: '63%',
-                  width: '170px'
+                  top: "-16%",
+                  left: '66%',
+                  width: '160px'
                 }}
                 >
                   <TimePicker onSelect={handleSelectTime} />

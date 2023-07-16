@@ -1,5 +1,5 @@
 import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
-import { HomePage, FinancePage, JobPage, AcademicPage } from "./pages"
+import { HomePage, FinancePage, JobPage, AcademicPage, LoginPage, RegistrationPage } from "./pages"
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import React from "react";
@@ -11,6 +11,8 @@ const App = () => {
       <BrowserRouter>
         <CssBaseline />
         <Routes>
+          <Route path="/register" element={<RegistrationPage />}/>
+          <Route path="/login" element={<LoginPage />}/>
           <Route path="/" element={<HomePage />} />
           <Route path="/finance" element={<FinancePage />} />
           <Route path="/academics" element={<AcademicPage />} />

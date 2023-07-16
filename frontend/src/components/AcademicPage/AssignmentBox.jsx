@@ -1,71 +1,130 @@
-import {React, useEffect, useState} from 'react';
+import { React, useEffect, useState } from 'react';
 import { assignmentData } from '../../data/dummy';
-import Button from "@mui/material/Button";
+import Button from '@mui/material/Button';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddTaskPopUp from './AddTaskPopUp';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import OptionsPopUp from '../Others/OptionsPopUp';
 
 const AssignmentBox = () => {
-  
+  const [showOptionsPopUp, setShowOptionsPopUp] = useState(false);
+  const [popUpPosition, setPopUpPosition] = useState({ x: 0, y: 0 });
   const [showAddTaskPopUp, setShowAddTaskPopUp] = useState(false);
 
+  // options pop-up functions
+  const handleShowOptionsPopUp = (event) => {
+    const x = event.clientX - 10;
+    const y = event.clientY + 10;
+    setPopUpPosition({ x, y });
+    setShowOptionsPopUp(true);
+    document.body.style.overflow = 'hidden'; // Disable scrolling
+  };
+
+  const handleDontShowOptionsPopUp = () => {
+    setShowOptionsPopUp(false);
+    document.body.style.overflow = 'auto'; // Enable scrolling
+  };
+
+  // add task functions
   const handleAddTaskClick = () => {
     setShowAddTaskPopUp(true);
+    document.body.style.overflow = 'hidden'; // Disable scrolling
   };
 
   const handlePopUpClose = () => {
     setShowAddTaskPopUp(false);
+    document.body.style.overflow = 'auto'; // Enable scrolling
   };
 
   return (
-  <div className="academic-page-box-container">
-    <p className='academic-page-box-header'>Assignments</p>
-    <p className='academic-page-box-subheader' style={{padding: '0px 0px 30px 0px'}}>Here's a list of tasks for this semester!</p>
-    <div style={{padding: '0px 0px 20px 0px'}}>
-      <Button 
-        sx={{
-          color: 'white', 
-          border: '1px solid #5A5A5A', 
-          borderRadius: '5px', 
-          padding: '5px 8px', 
-          textTransform: 'none',
-          '&:hover': {
-            backgroundColor: '#333333'
-          }
-        }}
-        onClick={handleAddTaskClick}
+    <div className="academic-page-box-container">
+      <p className="academic-page-box-header">Assignments</p>
+      <p className="academic-page-box-subheader" style={{ padding: '0px 0px 30px 0px' }}>
+        Here's a list of tasks for this semester!
+      </p>
+      <div style={{ padding: '0px 0px 20px 0px' }}>
+        <Button
+          sx={{
+            color: 'white',
+            border: '1px solid #5A5A5A',
+            borderRadius: '5px',
+            padding: '5px 8px',
+            textTransform: 'none',
+            '&:hover': {
+              backgroundColor: '#333333',
+            },
+          }}
+          onClick={handleAddTaskClick}
         >
-        <AddCircleOutlineIcon sx={{fontSize: '15px'}}/>
-        <p style={{fontSize:'15px'}}>{'\u00A0Add Task'}</p>
-      </Button>
-    </div>
-    <div className="scroll-container" style={{height: '400px', width: '100%'}}>
-    <div className='scroll-container-element-container'>
-      <div className="scroll-container-element" style={{width: '100px', color: '#a3a3a3'}}>ID</div>
-      <div className="scroll-container-element" style={{width: '350px', color: '#a3a3a3'}}>Task</div>
-      <div className="scroll-container-element" style={{width: '250px', color: '#a3a3a3'}}>Deadline</div>
-      <div className="scroll-container-element" style={{width: '100px', color: '#a3a3a3'}}>Complete</div>
-      <div className="scroll-container-element" style={{width: '100px', color: '#a3a3a3'}}></div>
-    </div>
-    {assignmentData && assignmentData.map(item => (
-      <div key={item.id} className="scroll-container-element-container">
-      <div className="scroll-container-element" style={{width: '100px'}}>{item.id}</div>
-      <div className="scroll-container-element" style={{width: '350px'}}>{item.description}</div>
-      <div className="scroll-container-element" style={{width: '250px'}}>{item.dateTime}</div>
-      <div className="scroll-container-element" style={{width: '100px', justifyContent: 'center'}}>{item.complete}</div>
-      <div className="scroll-container-element" style={{width: '100px', justifyContent: 'center'}}>{item.complete}</div>
+          <AddCircleOutlineIcon sx={{ fontSize: '15px' }} />
+          <p style={{ fontSize: '15px' }}>{'\u00A0Add Task'}</p>
+        </Button>
       </div>
-    ))}
-    </div>
-    {showAddTaskPopUp && (
-      <div className='pop-up-overlay'>
-        <div className="pop-up-background" onClick={handlePopUpClose}/>
-        <div className="pop-up-content">
-          <AddTaskPopUp onClose={setShowAddTaskPopUp}/> 
+      <div className="scroll-container" style={{ height: '400px', width: '100%' }}>
+        <div className="scroll-container-element-container">
+          <div className="scroll-container-element" style={{ width: '100px', color: '#a3a3a3' }}>
+            ID
+          </div>
+          <div className="scroll-container-element" style={{ width: '350px', color: '#a3a3a3' }}>
+            Task
+          </div>
+          <div className="scroll-container-element" style={{ width: '250px', color: '#a3a3a3' }}>
+            Deadline
+          </div>
+          <div className="scroll-container-element" style={{ width: '100px', color: '#a3a3a3' }}>
+            Complete
+          </div>
+          <div className="scroll-container-element" style={{ width: '80px', color: '#a3a3a3' }}></div>
         </div>
-      </div> 
-    )}
-  </div>
-  )
-}
+        {assignmentData &&
+          assignmentData.map((item) => (
+            <div key={item.id} className="scroll-container-element-container">
+              <div className="scroll-container-element" style={{ width: '100px' }}>
+                {item.id}
+              </div>
+              <div className="scroll-container-element" style={{ width: '350px' }}>
+                {item.description}
+              </div>
+              <div className="scroll-container-element" style={{ width: '250px' }}>
+                {item.dateTime}
+              </div>
+              <div
+                className="scroll-container-element"
+                style={{ width: '100px', justifyContent: 'center' }}
+              >
+                {item.complete}
+              </div>
+              <div className="scroll-container-element" style={{ width: '80px', justifyContent: 'center' }}>
+                <Button
+                  sx={{
+                    height: '20px',
+                    '&:hover': { backgroundColor: '#333333' },
+                  }}
+                  onClick={(event) => handleShowOptionsPopUp(event)}
+                >
+                  <MoreHorizIcon sx={{ color: 'white' }} />
+                </Button>
+              </div>
+            </div>
+          ))}
+        {showOptionsPopUp && (
+          <div className="pop-up-overlay" onClick={handleDontShowOptionsPopUp}>
+            <div style={{ position: 'absolute', top: popUpPosition.y, left: popUpPosition.x }}>
+              <OptionsPopUp />
+            </div>
+          </div>
+        )}
+      </div>
+      {showAddTaskPopUp && (
+        <div className="pop-up-overlay">
+          <div className="pop-up-background" onClick={handlePopUpClose} />
+          <div className="pop-up-content">
+            <AddTaskPopUp onClose={setShowAddTaskPopUp} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
-export default AssignmentBox
+export default AssignmentBox;

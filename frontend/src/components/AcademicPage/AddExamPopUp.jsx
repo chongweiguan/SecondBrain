@@ -1,8 +1,6 @@
 import {React, useState} from "react";
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTime from '@mui/icons-material/AccessTime';
 import { Button } from "@mui/material";
-import Calendar from "../Others/Calendar";
 import TimePicker from "../Others/TimePicker";
 
 
@@ -67,7 +65,7 @@ const AddExamPopUp = ({ onClose }) => {
               gap: '15px', 
               alignItems: 'center', 
             }}>
-            <p style={{fontSize:'18px', fontWeight: '520'}}>Venue</p>
+            <p style={{fontSize:'18px', fontWeight: '520', fontSize: '17px'}}>Venue</p>
             <input
             type="text" name="" required className="inputField" style={{width: '190px', height: '35px'}}
           />
@@ -78,7 +76,7 @@ const AddExamPopUp = ({ onClose }) => {
               gap: '15px', 
               alignItems: 'center', 
             }}>
-            <p style={{fontSize:'18px', fontWeight: '520'}}>Time</p>
+            <p style={{fontSize:'18px', fontWeight: '520', fontSize: '17px'}}>Time</p>
             <Button 
               onClick={handleShowTimePicker}
               sx={{
@@ -104,9 +102,9 @@ const AddExamPopUp = ({ onClose }) => {
                 <div
                 style={{
                   position: "absolute",
-                  top: "9%",
-                  left: '63%',
-                  width: '170px'
+                  top: "-15%",
+                  left: '67%',
+                  width: '150px'
                 }}
                 >
                   <TimePicker onSelect={handleSelectTime} />

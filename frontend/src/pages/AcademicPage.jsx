@@ -3,6 +3,8 @@ import Banner from '../components/Others/Banner'
 import banner3 from '../assets/banner3.mp4';
 import AssignmentBox from '../components/AcademicPage/AssignmentBox';
 import ExamBox from '../components/AcademicPage/ExamBox';
+import ModuleBox from '../components/AcademicPage/ModuleBox';
+import ModuleProgress from '../components/AcademicPage/ModuleProgress';
 
 const AcademicPage = () => {
   return (
@@ -29,9 +31,13 @@ const AcademicPage = () => {
               Modules: CS2102 CS2105
           </p>
         </div>
-        <div style={{padding: '50px 10px 80px 10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
+        <div style={{padding: '50px 10px 60px 10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
           <AssignmentBox />
           <ExamBox />
+        </div>
+        <div style={{padding: '0px 10px 80px 10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
+          <ModuleBox />
+          <ModuleProgress />
         </div>
     </div>
   )

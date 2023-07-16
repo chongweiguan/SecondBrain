@@ -1,0 +1,123 @@
+import { React, useState, useEffect } from 'react';
+import banner4 from '../assets/banner4.mp4';
+import AuthBanner from '../components/Others/AuthBanner';
+import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
+import google from '../assets/google-icon.png';
+
+const LoginPage = () => {
+
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+    setIsSmallScreen(window.innerWidth <= 1100);
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => {
+    window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return (
+  <div className="black-background" 
+    style={{display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center'}}>
+    {isSmallScreen ?  null : <AuthBanner bannerPath={banner4}/>}
+    <div 
+    style={{
+      height: '100vh', 
+      width: '100vh', 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center'
+    }}>
+    <div style={{
+      display: 'flex', 
+      flexDirection: 'column',
+      justifyContent: 'center', 
+      alignItems: 'center',
+    }}>
+      <p className='main-header'>&#123; Second Brain &#125;</p>
+      <p style={{padding: '10px 0px 40px 0px', fontWeight: '500', color: '#969696'}}>Don't wait for opportunity, create it.</p>
+      <div style={{display: 'flex', flexDirection: 'column', gap:'10px'}}>
+      <p style={{fontWeight:'600', padding: '10px 0px'}}>Login Account</p>
+      <input
+        type="text" name="" required className="inputField" style={{width: '400px', height: '35px', fontSize: '17px'}}
+        placeholder="Email Address"
+      />
+      <input
+        name="" required className="inputField" style={{width: '400px', height: '35px', fontSize: '17px'}}
+        placeholder="Password"
+        type="password"
+      />
+      <div style={{display: 'flex', justifyContent:'end',}}>
+        <Link to="/finance">
+        <p className='small-link'>
+          Forgot Password?
+        </p>
+        </Link>
+      </div>
+      </div>
+      <div style={{padding: '30px 0px 0px 0px'}}>
+      <Button
+        sx={{
+        fontWeight: '600',
+        backgroundColor: 'black',
+        width: '190px',
+        fontSize: '17px',
+        color: 'white', 
+        border: '1px solid #5A5A5A', 
+        borderRadius: '20px', 
+        padding: '5px 8px', 
+        textTransform: 'none',
+        '&:hover': {
+          backgroundColor: 'white',
+          color: 'black'
+        }
+        }}
+      >Sign In</Button>
+      </div>
+      <div
+      style={{
+        padding: '40px 0px 0px 0px',
+        display: 'flex',
+        justifyContent: 'center', 
+        alignItems: 'center',
+        gap: '20px'
+      }}
+      >
+      <hr style={{width: '200px', marginTop: '2px', border: '1px solid #5C5C5C'}}/>
+      <p>or</p>
+      <hr style={{width: '200px', marginTop: '2px', border: '1px solid #5C5C5C'}}/>
+      </div>
+      <div style={{padding: '60px 0px 0px 0px'}}>
+      <Button
+        sx={{
+        fontWeight: '600',
+        backgroundColor: 'white',
+        width: '220px',
+        fontSize: '15px',
+        color: 'black', 
+        border: '1px solid #5A5A5A', 
+        borderRadius: '7px', 
+        padding: '5px 8px', 
+        textTransform: 'none',
+        }}
+      ><img style={{height: '25px'}}src={google}/>{"\u00A0\u00A0Sign In with Google"}</Button>
+      </div>
+      <div style={{padding: '40px 0px 0px 0px', display: 'flex'}}>
+      <p style={{fontSize: '12px'}}>{"Dont have an Account?\u00A0"}</p>
+      <Link to='/register'>
+        <p className='small-link'>Create Account</p>
+      </Link>
+      </div>
+    </div>
+    </div>
+  </div>
+  )
+}
+
+export default LoginPage;

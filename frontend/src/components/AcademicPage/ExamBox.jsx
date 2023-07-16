@@ -3,17 +3,38 @@ import {React, useEffect, useState} from 'react';
 import Button from "@mui/material/Button";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddExamPopUp from './AddExamPopUp';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import OptionsPopUp from '../Others/OptionsPopUp';
 
 const ExamBox = () => {
 
+  const [showOptionsPopUp, setShowOptionsPopUp] = useState(false);
+  const [popUpPosition, setPopUpPosition] = useState({ x: 0, y: 0 });
+
   const [showAddExamPopUp, setShowAddExamPopUp] = useState(false);
+
+  //options pop up functions
+  const handleShowOptionsPopUp = (event) => {
+    const x = event.clientX - 10;
+    const y = event.clientY + 10;
+    setPopUpPosition({ x, y });
+    setShowOptionsPopUp(true);
+    document.body.style.overflow = 'hidden'; // Disable scrolling
+  }
+
+  const handleDontShowOptionsPopUp = () => {
+    setShowOptionsPopUp(false);
+    document.body.style.overflow = 'auto'; // Enable scrolling
+  }
 
   const handleAddExamClick = () => {
     setShowAddExamPopUp(true);
+    document.body.style.overflow = 'hidden'; // Disable scrolling
   };
 
   const handlePopUpClose = () => {
     setShowAddExamPopUp(false);
+    document.body.style.overflow = 'auto'; // Enable scrolling
   };
 
   return (
@@ -41,18 +62,44 @@ const ExamBox = () => {
     <div className="scroll-container" style={{height: '400px', width: '100%'}}>
     <div className='scroll-container-element-container'>
       <div className="scroll-container-element" style={{width: '100px', color: '#a3a3a3'}}>ID</div>
-      <div className="scroll-container-element" style={{width: '400px', color: '#a3a3a3'}}>Exam</div>
+      <div className="scroll-container-element" style={{width: '300px', color: '#a3a3a3'}}>Exam</div>
       <div className="scroll-container-element" style={{width: '250px', color: '#a3a3a3'}}>Date</div>
       <div className="scroll-container-element" style={{width: '100px', color: '#a3a3a3'}}>Venue</div>
+      <div className="scroll-container-element" style={{width: '50px', color: '#a3a3a3'}}></div>
     </div>
     {examsData && examsData.map(item => (
       <div key={item.id} className="scroll-container-element-container">
       <div className="scroll-container-element" style={{width: '100px'}}>{item.id}</div>
-      <div className="scroll-container-element" style={{width: '400px'}}>{item.description}</div>
+      <div className="scroll-container-element" style={{width: '300px'}}>{item.description}</div>
       <div className="scroll-container-element" style={{width: '250px'}}>{item.dateTime}</div>
       <div className="scroll-container-element" style={{width: '100px', justifyContent: 'center'}}>{item.venue}</div>
+      <div className="scroll-container-element" style={{width: '50px', justifyContent: 'center'}}>
+        <Button
+          sx={{
+            height: '20px',
+            borderRadius: '10px',
+            '&:hover': {
+              backgroundColor: '#333333'
+            }
+          }}
+          onClick={(event) => handleShowOptionsPopUp(event)}
+        >
+          <MoreHorizIcon 
+            sx={{
+              color: 'white',
+            }}
+          />
+        </Button>
+      </div>
       </div>
     ))}
+    {showOptionsPopUp && (
+      <div className='pop-up-overlay' onClick={handleDontShowOptionsPopUp}>
+        <div style={{ position: 'absolute', top: popUpPosition.y, left: popUpPosition.x }}>
+          <OptionsPopUp />
+        </div>
+      </div>
+    )}
     {showAddExamPopUp && (
       <div className='pop-up-overlay'>
         <div className="pop-up-background" onClick={handlePopUpClose}/>
