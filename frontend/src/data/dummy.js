@@ -106,7 +106,7 @@ export const assignmentData = [
 export const jobData = [
   {
     id: 1,
-    company: 'Grab',
+    company: 'Company 1',
     position: 'Software Engineer Intern',
     status: 'first round',
     next_deadline: '27/5/2023',
@@ -114,7 +114,7 @@ export const jobData = [
   },
   {
     id: 2,
-    company: 'Google',
+    company: 'Company 2',
     position: 'Software Engineer Intern',
     status: 'first round',
     next_deadline: '27/5/2023',
@@ -122,7 +122,7 @@ export const jobData = [
   },
   {
     id: 3,
-    company: 'Meta',
+    company: 'Company 3',
     position: 'Software Engineer Intern',
     status: 'first round',
     next_deadline: '27/5/2023',
@@ -130,7 +130,7 @@ export const jobData = [
   },
   {
     id: 4,
-    company: 'Jane Street',
+    company: 'Company 4',
     position: 'Software Engineer Intern',
     status: 'first round',
     next_deadline: '27/5/2023',
@@ -138,7 +138,7 @@ export const jobData = [
   },
   {
     id: 5,
-    company: 'Citadel Street',
+    company: 'Company 5',
     position: 'Software Engineer Intern',
     status: 'first round',
     next_deadline: '27/5/2023',
