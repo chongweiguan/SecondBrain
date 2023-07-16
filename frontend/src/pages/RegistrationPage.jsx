@@ -57,7 +57,7 @@ const RegistrationPage = () => {
       alignItems: 'center',
     }}>
       <p className='main-header'>&#123; Second Brain &#125;</p>
-      <p style={{padding: '0px 0px 40px 0px', fontWeight: '500', color: '#969696'}}>Don't wait for opportunity, create it.</p>
+      <p style={{padding: '0px 0px 40px 0px', fontWeight: '500', color: '#969696'}}>He who climbs the ladder must begin at the bottom.</p>
       <div style={{display: 'flex', flexDirection: 'column'}}>
         <div style={{width: '650px'}}>
           <p style={{fontSize: '28px', fontWeight: '700'}}>Registration</p>

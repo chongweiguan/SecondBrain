@@ -5,6 +5,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddModulePopUp from './AddModulePopUp';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import OptionsPopUp from '../Others/OptionsPopUp';
+import EditModulePopUp from './EditModulePopUp';
+import DeletePopUp from '../Others/DeletePopUp';
 
 const ModuleBox = () => {
 
@@ -12,6 +14,8 @@ const ModuleBox = () => {
     const [popUpPosition, setPopUpPosition] = useState({ x: 0, y: 0 });
 
     const [showAddModulePopUp, setShowAddModulePopUp] = useState(false);
+    const [showEditModulePopUp, setShowEditModulePopUp] = useState(false);
+    const [showDeleteModulePopUp, setShowDeleteModulePopUp] = useState(false);
 
     const handleShowOptionsPopUp = (event) => {
       const x = event.clientX - 10;
@@ -26,6 +30,20 @@ const ModuleBox = () => {
       document.body.style.overflow = 'auto'; // Enable scrolling
     }
 
+    //delete module function
+    const handleDeleteModuleClick = () => {
+      document.body.style.overflow = 'hidden';
+      setShowDeleteModulePopUp(true);
+      setShowOptionsPopUp(false);
+    }
+
+    //edit module function
+    const handleEditModuleClick = () => {
+      document.body.style.overflow = 'hidden';
+      setShowEditModulePopUp(true);
+      setShowOptionsPopUp(false);
+    }
+
     const handleAddModuleClick = () => {
       setShowAddModulePopUp(true);
       document.body.style.overflow = 'hidden';
@@ -33,6 +51,9 @@ const ModuleBox = () => {
   
     const handlePopUpClose = () => {
       setShowAddModulePopUp(false);
+      setShowEditModulePopUp(false);
+      setShowOptionsPopUp(false);
+      setShowDeleteModulePopUp(false);
       document.body.style.overflow = 'auto';
     };
   
@@ -98,7 +119,7 @@ const ModuleBox = () => {
       {showOptionsPopUp && (
         <div className='pop-up-overlay' onClick={handleDontShowOptionsPopUp}>
           <div style={{ position: 'absolute', top: popUpPosition.y, left: popUpPosition.x }}>
-            <OptionsPopUp />
+            <OptionsPopUp onEditClick={handleEditModuleClick} onDeleteClick={handleDeleteModuleClick}/>
           </div>
         </div>
       )}
@@ -110,6 +131,22 @@ const ModuleBox = () => {
           </div>
         </div> 
       )}
+      {showEditModulePopUp && (
+      <div className="pop-up-overlay">
+        <div className="pop-up-background" onClick={handlePopUpClose} />
+        <div className="pop-up-content">
+          <EditModulePopUp onClose={setShowEditModulePopUp} />
+        </div>
+      </div>
+    )}
+    {showDeleteModulePopUp && (
+      <div className="pop-up-overlay">
+        <div className="pop-up-background" onClick={handlePopUpClose} />
+        <div className="pop-up-content">
+          <DeletePopUp onClose={setShowDeleteModulePopUp} />
+        </div>
+      </div>
+    )}
     </div>
     )
 }

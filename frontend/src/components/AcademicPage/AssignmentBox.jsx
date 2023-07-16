@@ -5,11 +5,24 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddTaskPopUp from './AddTaskPopUp';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import OptionsPopUp from '../Others/OptionsPopUp';
+import Checkbox from '@mui/material/Checkbox';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import EditTaskPopUp from './EditTaskPopUp';
+import DeletePopUp from '../Others/DeletePopUp';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 const AssignmentBox = () => {
   const [showOptionsPopUp, setShowOptionsPopUp] = useState(false);
   const [popUpPosition, setPopUpPosition] = useState({ x: 0, y: 0 });
   const [showAddTaskPopUp, setShowAddTaskPopUp] = useState(false);
+  const [showEditTaskPopUp, setShowEditTaskPopUp] = useState(false);
+  const [showDeleteTaskPopUp, setShowDeleteTaskPopUp] = useState(false);
 
   // options pop-up functions
   const handleShowOptionsPopUp = (event) => {
@@ -20,10 +33,23 @@ const AssignmentBox = () => {
     document.body.style.overflow = 'hidden'; // Disable scrolling
   };
 
+  const handleDeleteTaskClick = () => {
+    document.body.style.overflow = 'hidden';
+    setShowDeleteTaskPopUp(true);
+    setShowOptionsPopUp(false);
+  }
+
   const handleDontShowOptionsPopUp = () => {
     setShowOptionsPopUp(false);
     document.body.style.overflow = 'auto'; // Enable scrolling
   };
+
+  //edit task function
+  const handleEditTaskClick = () => {
+    document.body.style.overflow = 'hidden';
+    setShowEditTaskPopUp(true);
+    setShowOptionsPopUp(false);
+  }
 
   // add task functions
   const handleAddTaskClick = () => {
@@ -33,6 +59,8 @@ const AssignmentBox = () => {
 
   const handlePopUpClose = () => {
     setShowAddTaskPopUp(false);
+    setShowEditTaskPopUp(false);
+    setShowOptionsPopUp(false);
     document.body.style.overflow = 'auto'; // Enable scrolling
   };
 
@@ -92,7 +120,10 @@ const AssignmentBox = () => {
                 className="scroll-container-element"
                 style={{ width: '100px', justifyContent: 'center' }}
               >
-                {item.complete}
+                <ThemeProvider theme={darkTheme}>
+                <CssBaseline />
+                  <Checkbox color="default" sx={{height: '20px'}}/>
+              </ThemeProvider>
               </div>
               <div className="scroll-container-element" style={{ width: '80px', justifyContent: 'center' }}>
                 <Button
@@ -110,7 +141,7 @@ const AssignmentBox = () => {
         {showOptionsPopUp && (
           <div className="pop-up-overlay" onClick={handleDontShowOptionsPopUp}>
             <div style={{ position: 'absolute', top: popUpPosition.y, left: popUpPosition.x }}>
-              <OptionsPopUp />
+              <OptionsPopUp onEditClick={handleEditTaskClick} onDeleteClick={handleDeleteTaskClick}/>
             </div>
           </div>
         )}
@@ -123,6 +154,22 @@ const AssignmentBox = () => {
           </div>
         </div>
       )}
+      {showEditTaskPopUp && (
+      <div className="pop-up-overlay">
+        <div className="pop-up-background" onClick={handlePopUpClose} />
+        <div className="pop-up-content">
+          <EditTaskPopUp onClose={setShowEditTaskPopUp} />
+        </div>
+      </div>
+    )}
+    {showDeleteTaskPopUp && (
+      <div className="pop-up-overlay">
+        <div className="pop-up-background" onClick={handlePopUpClose} />
+        <div className="pop-up-content">
+          <DeletePopUp onClose={setShowDeleteTaskPopUp} />
+        </div>
+      </div>
+    )}
     </div>
   );
 };

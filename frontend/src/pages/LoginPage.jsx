@@ -41,7 +41,7 @@ const LoginPage = () => {
       alignItems: 'center',
     }}>
       <p className='main-header'>&#123; Second Brain &#125;</p>
-      <p style={{padding: '10px 0px 40px 0px', fontWeight: '500', color: '#969696'}}>Don't wait for opportunity, create it.</p>
+      <p style={{padding: '10px 0px 40px 0px', fontWeight: '500', color: '#969696'}}>He who climbs the ladder must begin at the bottom.</p>
       <div style={{display: 'flex', flexDirection: 'column', gap:'10px'}}>
       <p style={{fontWeight:'600', padding: '10px 0px'}}>Login Account</p>
       <input

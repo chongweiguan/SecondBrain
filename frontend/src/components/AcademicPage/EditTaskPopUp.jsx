@@ -1,18 +1,21 @@
 import {React, useState} from "react";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTime from '@mui/icons-material/AccessTime';
 import { Button } from "@mui/material";
-import TimePicker from "../Others/TimePicker";
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Calendar from "../Others/Calendar";
+import TimePicker from "../Others/TimePicker";
 
 
-const AddExamPopUp = ({ onClose }) => {
+const EditTaskPopUp = ({ onClose, task, date, time }) => {
 
-  const [selectedTime, setSelectedTime] = useState("\u00A0");
-  const [showTimePicker, setShowTimePicker] = useState(false);
-
-  const [selectedDate, setSelectedDate] = useState("\u00A0");
+  const [selectedDate, setSelectedDate] = useState(date);
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const [selectedTime, setSelectedTime] = useState(time);
+
+  const [selectedTask, setTask] = useState(task);
+
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   //Date Picker functions
   const handleShowDatePicker = () => {
@@ -27,7 +30,7 @@ const AddExamPopUp = ({ onClose }) => {
   const handleCloseDatePicker = () => {
     setShowDatePicker(false);
   }
-
+  
   //Time Picker functions
   const handleShowTimePicker = () => {
     setShowTimePicker(true);
@@ -49,17 +52,17 @@ const AddExamPopUp = ({ onClose }) => {
   return (
     <div className='pop-up-container' style={{
       padding: '30px 30px',
-      height:'400px',
+      height:'350px',
       width: '550px',
       position: "absolute",
       top: "120%",
       left: "50%",
       transform: "translate(-50%, -50%)"
     }}>
-      <p className='pop-up-header' style={{fontSize:'25px'}}>Add Exam</p>
-      <p className='pop-up-subheader' style={{fontSize:'16px'}}>Add new examinations here. Click Add when you are done.</p>
+      <p className='pop-up-header'>Edit Task</p>
+      <p className='pop-up-subheader'>Edit tasks here. Click Confirm when you are done.</p>
       <div style={{
-        height: '190px', 
+        height: '150px', 
         display:'flex', 
         justifyContent: 'center', 
         alignItems: 'center',
@@ -70,25 +73,25 @@ const AddExamPopUp = ({ onClose }) => {
             display:'flex', 
             gap: '15px', 
             alignItems: 'center', 
-            padding: '30px 0px 25px 0px',
+            padding: '30px 0px 30px 0px'
           }}>
-          <p style={{fontSize:'18px', fontWeight: '520'}}>{'Exam\u00A0'}</p>
+          <p style={{fontSize:'18px', fontWeight: '520'}}>Task</p>
           <input
-            type="text" name="" required className="inputField" style={{width: '420px', height: '35px', fontSize: '17px'}}
+            type="text" name="" required className="inputField" style={{width: '435px', height: '35px', fontSize: '17px'}}
           />
         </div>
-        <div style={{display: 'flex', gap: '20px', padding: '0px 0px 25px 0px'}}>
+        <div style={{display: 'flex', gap: '20px'}}>
           <div 
             style={{
               display:'flex', 
-              gap: '25px', 
+              gap: '15px', 
               alignItems: 'center', 
             }}>
             <p style={{fontSize:'18px', fontWeight: '520'}}>Date</p>
             <Button
               onClick={handleShowDatePicker}
               sx={{
-                width:'180px',
+                width:'195px',
                 height: '35px',
                 color: 'white', 
                 border: '1px solid grey', 
@@ -161,20 +164,6 @@ const AddExamPopUp = ({ onClose }) => {
             )}
           </div>
         </div>
-        <div style={{display: 'flex'}}>
-          <div 
-            style={{
-              display:'flex', 
-              gap: '18px', 
-              alignItems: 'center',
-              width: '490px' 
-            }}>
-            <p style={{fontSize:'18px', fontWeight: '520', fontSize: '17px'}}>Venue</p>
-            <input
-            type="text" name="" required className="inputField" style={{width: '250px', height: '35px', borderRadius: '5px'}}
-          />
-          </div>
-        </div>
       </div>
       <div style={{marginTop: '35px', width: '490px', display: 'flex', justifyContent: 'flex-end', gap: '15px' }}>
         <Button
@@ -208,10 +197,10 @@ const AddExamPopUp = ({ onClose }) => {
             }
           }}
           onClick={handleCancel}
-        >Add</Button>
+        >Confirm</Button>
       </div>
     </div>
   )
 }
 
-export default AddExamPopUp;
+export default EditTaskPopUp;

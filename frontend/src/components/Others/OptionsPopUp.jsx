@@ -1,7 +1,16 @@
 import {React, useState} from "react";
 import { Button } from "@mui/material";
 
-const OptionsPopUp = () => {
+const OptionsPopUp = ( {onEditClick, onDeleteClick}) => {
+
+  const handleEditClick = () => {
+    onEditClick();
+  };
+
+  const handleDeleteClick = () => {
+    onDeleteClick();
+  };
+
   return (
     <div style={{
       height:  '70px',
@@ -21,6 +30,7 @@ const OptionsPopUp = () => {
             backgroundColor: '#333333'
           }
         }}
+        onClick={handleEditClick}
       >
         Edit
       </Button>
@@ -34,8 +44,8 @@ const OptionsPopUp = () => {
           '&:hover': {
             backgroundColor: '#333333'
           }
-
         }}
+        onClick={handleDeleteClick}
       >
         Delete
       </Button>

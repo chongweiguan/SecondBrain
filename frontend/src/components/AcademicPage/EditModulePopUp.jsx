@@ -1,7 +1,7 @@
 import {React, useState} from "react";
 import { Button } from "@mui/material";
 
-const AddModulePopUp = ({ onClose }) => {
+const EditModulePopUp = ({ onClose }) => {
 
   const [showTypePicker, setTypePicker] = useState(false);
   const [selectedType, setSelectedType] = useState(null);
@@ -105,8 +105,8 @@ const AddModulePopUp = ({ onClose }) => {
         left: "50%",
         transform: "translate(-50%, -50%)"
     }}>
-        <p className='pop-up-header' style={{fontSize:'25px'}}>Add Module</p>
-        <p className='pop-up-subheader' style={{fontSize:'16px'}}>Add new module here. Click Add when you are done.</p>
+        <p className='pop-up-header' style={{fontSize:'25px'}}>Edit Module</p>
+        <p className='pop-up-subheader' style={{fontSize:'16px'}}>Edit module here. Click Confirm when you are done.</p>
         <div style={{
           height: '200px', 
           display:'flex', 
@@ -223,10 +223,10 @@ const AddModulePopUp = ({ onClose }) => {
             }
             }}
             onClick={handleCancel}
-        >Add</Button>
+        >Confirm</Button>
         </div>
     </div>
     )
 }
 
-export default AddModulePopUp
+export default EditModulePopUp

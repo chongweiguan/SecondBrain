@@ -6,7 +6,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Calendar from "../Others/Calendar";
 
 
-const AddExamPopUp = ({ onClose }) => {
+const EditExamPopUp = ({ onClose }) => {
 
   const [selectedTime, setSelectedTime] = useState("\u00A0");
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -56,8 +56,8 @@ const AddExamPopUp = ({ onClose }) => {
       left: "50%",
       transform: "translate(-50%, -50%)"
     }}>
-      <p className='pop-up-header' style={{fontSize:'25px'}}>Add Exam</p>
-      <p className='pop-up-subheader' style={{fontSize:'16px'}}>Add new examinations here. Click Add when you are done.</p>
+      <p className='pop-up-header' style={{fontSize:'25px'}}>Edit Exam</p>
+      <p className='pop-up-subheader' style={{fontSize:'16px'}}>Edit examinations here. Click Confirm when you are done.</p>
       <div style={{
         height: '190px', 
         display:'flex', 
@@ -208,10 +208,10 @@ const AddExamPopUp = ({ onClose }) => {
             }
           }}
           onClick={handleCancel}
-        >Add</Button>
+        >Confirm</Button>
       </div>
     </div>
   )
 }
 
-export default AddExamPopUp;
+export default EditExamPopUp;

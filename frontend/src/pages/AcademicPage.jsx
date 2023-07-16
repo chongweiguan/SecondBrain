@@ -1,4 +1,4 @@
-import React from 'react'
+import { React, useState, useEffect } from 'react';
 import Banner from '../components/Others/Banner'
 import banner3 from '../assets/banner3.mp4';
 import AssignmentBox from '../components/AcademicPage/AssignmentBox';
@@ -7,6 +7,20 @@ import ModuleBox from '../components/AcademicPage/ModuleBox';
 import ModuleProgress from '../components/AcademicPage/ModuleProgress';
 
 const AcademicPage = () => {
+
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 1350);
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <div className="black-background">
       <Banner bannerPath={banner3} logo={'📔'} />
@@ -31,11 +45,11 @@ const AcademicPage = () => {
               Modules: CS2102 CS2105
           </p>
         </div>
-        <div style={{padding: '50px 10px 60px 10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
+        <div style={{padding: '50px 10px 60px 10px', display: 'flex', flexDirection: isSmallScreen ? 'column' : 'row', justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
           <AssignmentBox />
           <ExamBox />
         </div>
-        <div style={{padding: '0px 10px 80px 10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
+        <div style={{padding: '0px 10px 80px 10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', flexDirection: isSmallScreen ? 'column' : 'row'}}>
           <ModuleBox />
           <ModuleProgress />
         </div>

@@ -5,6 +5,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddExamPopUp from './AddExamPopUp';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import OptionsPopUp from '../Others/OptionsPopUp';
+import EditExamPopUp from './EditExamPopUp';
+import DeletePopUp from '../Others/DeletePopUp';
 
 const ExamBox = () => {
 
@@ -13,6 +15,10 @@ const ExamBox = () => {
 
   const [showAddExamPopUp, setShowAddExamPopUp] = useState(false);
 
+  const [showEditExamPopUp, setShowEditExamPopUp] = useState(false);
+
+  const [showDeleteExamPopUp, setShowDeleteExamPopUp] = useState(false);
+
   //options pop up functions
   const handleShowOptionsPopUp = (event) => {
     const x = event.clientX - 10;
@@ -20,6 +26,20 @@ const ExamBox = () => {
     setPopUpPosition({ x, y });
     setShowOptionsPopUp(true);
     document.body.style.overflow = 'hidden'; // Disable scrolling
+  }
+
+  //delete exam function
+  const handleDeleteExamClick = () => {
+    document.body.style.overflow = 'hidden';
+    setShowDeleteExamPopUp(true);
+    setShowOptionsPopUp(false);
+  }
+
+  //edit exam function
+  const handleEditExamClick = () => {
+    document.body.style.overflow = 'hidden';
+    setShowEditExamPopUp(true);
+    setShowOptionsPopUp(false);
   }
 
   const handleDontShowOptionsPopUp = () => {
@@ -34,6 +54,9 @@ const ExamBox = () => {
 
   const handlePopUpClose = () => {
     setShowAddExamPopUp(false);
+    setShowEditExamPopUp(false);
+    setShowOptionsPopUp(false);
+    showDeleteExamPopUp(false);
     document.body.style.overflow = 'auto'; // Enable scrolling
   };
 
@@ -96,7 +119,7 @@ const ExamBox = () => {
     {showOptionsPopUp && (
       <div className='pop-up-overlay' onClick={handleDontShowOptionsPopUp}>
         <div style={{ position: 'absolute', top: popUpPosition.y, left: popUpPosition.x }}>
-          <OptionsPopUp />
+          <OptionsPopUp onEditClick={handleEditExamClick} onDeleteClick={handleDeleteExamClick}/>
         </div>
       </div>
     )}
@@ -107,6 +130,22 @@ const ExamBox = () => {
           <AddExamPopUp onClose={setShowAddExamPopUp}/> 
         </div>
       </div> 
+    )}
+    {showEditExamPopUp && (
+      <div className="pop-up-overlay">
+        <div className="pop-up-background" onClick={handlePopUpClose} />
+        <div className="pop-up-content">
+          <EditExamPopUp onClose={setShowEditExamPopUp} />
+        </div>
+      </div>
+    )}
+    {showDeleteExamPopUp && (
+      <div className="pop-up-overlay">
+        <div className="pop-up-background" onClick={handlePopUpClose} />
+        <div className="pop-up-content">
+          <DeletePopUp onClose={setShowDeleteExamPopUp} />
+        </div>
+      </div>
     )}
     </div>
   </div>
