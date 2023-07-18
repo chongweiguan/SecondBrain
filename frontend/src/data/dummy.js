@@ -1,53 +1,4 @@
-export const financeData = [
-  {
-    id: 1,
-    description: 'FOUR LEAVES - JEM SI NG',
-    category: 'Food',
-    amount: 11.60,
-    dateTime: '27/5/2023',
-    isExpense: 1
-  },
-  {
-    id: 2,
-    description: 'TOP-UP TO PAYLAH! : chongweiguan',
-    category: 'Food',
-    amount: 10.80,
-    dateTime: '26/5/2023',
-    isExpense: 1
-  },
-  {
-    id: 3,
-    description: 'test1',
-    category: 'Food',
-    amount: 10.80,
-    dateTime: '26/3/2023',
-    isExpense: 1
-  },
-  {
-    id: 4,
-    description: 'test2',
-    category: 'Food',
-    amount: 10.80,
-    dateTime: '26/5/2023',
-    isExpense: 1
-  },
-  {
-    id: 5,
-    description: 'test3',
-    category: 'Food',
-    amount: 10.80,
-    dateTime: '26/5/2023',
-    isExpense: 1
-  },
-  {
-    id: 6,
-    description: 'test4',
-    category: 'Food',
-    amount: 10.80,
-    dateTime: '26/5/2023',
-    isExpense: 1
-  },
-];
+
 
 export const examsData = [
   {
@@ -110,7 +61,7 @@ export const jobData = [
     position: 'Software Engineer Intern',
     status: 'first round',
     next_deadline: '27/5/2023',
-    remarks: 1
+    remarks: 'The OA went well, waiitng for the next round hopefully'
   },
   {
     id: 2,
@@ -118,7 +69,7 @@ export const jobData = [
     position: 'Software Engineer Intern',
     status: 'first round',
     next_deadline: '27/5/2023',
-    remarks: 1
+    remarks: 'The OA went well, waiitng for the next round hopefully'
   },
   {
     id: 3,
@@ -126,7 +77,7 @@ export const jobData = [
     position: 'Software Engineer Intern',
     status: 'first round',
     next_deadline: '27/5/2023',
-    remarks: 1
+    remarks: 'The OA went well, waiitng for the next round hopefully'
   },
   {
     id: 4,
@@ -134,7 +85,7 @@ export const jobData = [
     position: 'Software Engineer Intern',
     status: 'first round',
     next_deadline: '27/5/2023',
-    remarks: 1
+    remarks: 'The OA went well, waiitng for the next round hopefully'
   },
   {
     id: 5,
@@ -142,7 +93,55 @@ export const jobData = [
     position: 'Software Engineer Intern',
     status: 'first round',
     next_deadline: '27/5/2023',
-    remarks: 1
+    remarks: 'The OA went well, waiitng for the next round hopefully'
+  },
+  {
+    id: 6,
+    company: 'Company 6',
+    position: 'Software Engineer Intern',
+    status: 'first round',
+    next_deadline: '27/5/2023',
+    remarks: 'The OA went well, waiitng for the next round hopefully'
+  },
+  {
+    id: 7,
+    company: 'Company 7',
+    position: 'Software Engineer Intern',
+    status: 'first round',
+    next_deadline: '27/5/2023',
+    remarks: 'The OA went well, waiitng for the next round hopefully'
+  },
+  {
+    id: 8,
+    company: 'Company 8',
+    position: 'Software Engineer Intern',
+    status: 'first round',
+    next_deadline: '27/5/2023',
+    remarks: 'The OA went well, waiitng for the next round hopefully'
+  },
+  {
+    id: 9,
+    company: 'Company 9',
+    position: 'Software Engineer Intern',
+    status: 'first round',
+    next_deadline: '27/5/2023',
+    remarks: 'The OA went well, waiitng for the next round hopefully'
+  },
+  {
+    id: 10,
+    company: 'Company 10',
+    position: 'Software Engineer Intern',
+    status: 'first round',
+    next_deadline: '27/5/2023',
+    remarks: 'The OA went well, waiitng for the next round hopefully'
+  },
+  {
+    id: 11,
+    company: 'Company 11',
+    position: 'Software Engineer Intern',
+    status: 'first round',
+    next_deadline: '27/5/2023',
+    remarks: 'The OA went well, waiitng for the next round hopefully'
   },
 ];
 
@@ -232,3 +231,100 @@ export const moduleData = [
     mc: 4
   },
 ]
+
+export const financeData = [
+  {
+    id: 1,
+    description: 'FOUR LEAVES - JEM SI NG',
+    category: 'Food',
+    amount: '-11.60',
+    dateTime: '27/5/2023',
+  },
+  {
+    id: 2,
+    description: 'TOP-UP TO PAYLAH! : chongweiguan',
+    category: 'Food',
+    amount: '-10.80',
+    dateTime: '26/5/2023',
+  },
+  {
+    id: 3,
+    description: 'test1',
+    category: 'Food',
+    amount: '-10.80',
+    dateTime: '26/3/2023',
+  },
+  {
+    id: 4,
+    description: 'test2',
+    category: 'Food',
+    amount: '10.80',
+    dateTime: '26/5/2023',
+  },
+  {
+    id: 5,
+    description: 'test3',
+    category: 'Food',
+    amount: '-10.80',
+    dateTime: '26/5/2023',
+  },
+  {
+    id: 6,
+    description: 'test4',
+    category: 'Food',
+    amount: '-10.80',
+    dateTime: '26/5/2023',
+  },
+  {
+    id: 7,
+    description: 'testing 5',
+    category: 'Food',
+    amount: '10.80',
+    dateTime: '26/5/2023',
+  },
+  // Random data for February to July
+  {
+    id: 8,
+    description: 'Coffee at Starbucks',
+    category: 'Food',
+    amount: '-5.50',
+    dateTime: '12/2/2023',
+  },
+  {
+    id: 9,
+    description: 'Movie ticket',
+    category: 'Entertainment',
+    amount: '-12.00',
+    dateTime: '22/3/2023',
+  },
+  {
+    id: 10,
+    description: 'Monthly subscription',
+    category: 'Subscription',
+    amount: '-20.00',
+    dateTime: '18/4/2023',
+  },
+  {
+    id: 11,
+    description: 'Dinner at a fancy restaurant',
+    category: 'Food',
+    amount: '-75.80',
+    dateTime: '06/5/2023',
+  },
+  {
+    id: 12,
+    description: 'Gym membership',
+    category: 'Subscription',
+    amount: '-50.00',
+    dateTime: '15/7/2023',
+  },
+  {
+    id: 13,
+    description: 'Online shopping',
+    category: 'Shopping',
+    amount: '-68.90',
+    dateTime: '28/7/2023',
+  },
+];
+
+

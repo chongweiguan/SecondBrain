@@ -46,7 +46,7 @@ const AssignmentBox = () => {
 
   //edit task function
   const handleEditTaskClick = () => {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'auto';
     setShowEditTaskPopUp(true);
     setShowOptionsPopUp(false);
   }
@@ -54,7 +54,7 @@ const AssignmentBox = () => {
   // add task functions
   const handleAddTaskClick = () => {
     setShowAddTaskPopUp(true);
-    document.body.style.overflow = 'hidden'; // Disable scrolling
+    document.body.style.overflow = 'auto'; // Disable scrolling
   };
 
   const handlePopUpClose = () => {

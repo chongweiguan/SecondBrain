@@ -37,7 +37,7 @@ const ExamBox = () => {
 
   //edit exam function
   const handleEditExamClick = () => {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'auto';
     setShowEditExamPopUp(true);
     setShowOptionsPopUp(false);
   }
@@ -49,7 +49,7 @@ const ExamBox = () => {
 
   const handleAddExamClick = () => {
     setShowAddExamPopUp(true);
-    document.body.style.overflow = 'hidden'; // Disable scrolling
+    document.body.style.overflow = 'auto'; // Disable scrolling
   };
 
   const handlePopUpClose = () => {

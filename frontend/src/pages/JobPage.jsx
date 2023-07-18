@@ -2,6 +2,7 @@ import React from 'react'
 import Banner from '../components/Others/Banner'
 import banner3 from '../assets/banner3.mp4'
 import LeetCodeBox from '../components/JobPage/LeetCodeBox'
+import JobBox from '../components/JobPage/JobBox'
 
 const JobPage = () => {
   return (
@@ -24,7 +25,8 @@ const JobPage = () => {
           </div>
         </div>
         <div>
-          <div>
+          <div style={{padding: '0px 105px 50px 105px'}}>
+            <JobBox />
           </div>
         </div>
     </div>

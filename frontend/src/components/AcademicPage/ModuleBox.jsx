@@ -39,14 +39,14 @@ const ModuleBox = () => {
 
     //edit module function
     const handleEditModuleClick = () => {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'auto';
       setShowEditModulePopUp(true);
       setShowOptionsPopUp(false);
     }
 
     const handleAddModuleClick = () => {
       setShowAddModulePopUp(true);
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'auto';
     };
   
     const handlePopUpClose = () => {

@@ -45,6 +45,16 @@ p, h1, h2, h3, h4 {
   font-size: 16px;
 }
 
+.job-box-container {
+  background-color: black;
+  width: 100%;
+  height: 700px;
+  border-radius: 8px;
+  padding: 25px 30px;
+  border: 2px solid #333333;
+  min-width: 800px;
+}
+
 .academic-page-box-container {
   background-color: black;
   width: 650px;
@@ -82,6 +92,7 @@ p, h1, h2, h3, h4 {
   align-items: center;
   padding: 0 10px;
   transition: color 0.3s;
+  font-weight: 500;
 }
 
 .home-page-box-header:hover {

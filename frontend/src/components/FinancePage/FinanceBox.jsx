@@ -1,20 +1,21 @@
 import {React, useEffect, useState} from 'react';
-import { jobData } from '../../data/dummy';
+import { financeData } from '../../data/dummy';
 import Button from "@mui/material/Button";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import OptionsPopUp from '../Others/OptionsPopUp';
 import DeletePopUp from '../Others/DeletePopUp';
-import AddJobPopUp from './AddJobPopUp';
-import EditJobPopUp from './EditJobPopUp';
+import AddExpensesPopUp from './AddExpensesPopUp';
+import EditExpensesPopUp from './EditExpensesPopUp';
+import { formatDateTime } from '../../utils/DateTimeParser';
 
-const JobBox = () => {
+const FinanceBox = () => {
   const [showOptionsPopUp, setShowOptionsPopUp] = useState(false);
   const [popUpPosition, setPopUpPosition] = useState({ x: 0, y: 0 });
 
-  const [showAddJobPopUp, setShowAddJobPopUp] = useState(false);
-  const [showEditJobPopUp, setShowEditJobPopUp] = useState(false);
-  const [showDeleteJobPopUp, setShowDeleteJobPopUp] = useState(false); 
+  const [showAddExpensePopUp, setShowAddExpensePopUp] = useState(false);
+  const [showEditExpensePopUp, setShowEditExpensePopUp] = useState(false);
+  const [showDeleteExpensePopUp, setShowDeleteExpensePopUp] = useState(false); 
 
   const handleShowOptionsPopUp = (event) => {
     const x = event.clientX - 10;
@@ -29,35 +30,35 @@ const JobBox = () => {
     document.body.style.overflow = 'auto'; // Enable scrolling
   }
 
-  const handleDeleteJobClick = () => {
+  const handleDeleteExpenseClick = () => {
     document.body.style.overflow = 'hidden';
-    setShowDeleteJobPopUp(true);
+    setShowDeleteExpensePopUp(true);
     setShowOptionsPopUp(false);
   }
 
-  const handleEditJobClick = () => {
+  const handleEditExpenseClick = () => {
     document.body.style.overflow = 'hidden';
-    setShowEditJobPopUp(true);
+    setShowEditExpensePopUp(true);
     setShowOptionsPopUp(false);
   }
 
-  const handleAddJobClick = () => {
-    setShowAddJobPopUp(true);
+  const handleAddExpenseClick = () => {
+    setShowAddExpensePopUp(true);
     document.body.style.overflow = 'auto';
   };
 
   const handlePopUpClose = () => {
-    setShowAddJobPopUp(false);
-    setShowEditJobPopUp(false);
+    setShowAddExpensePopUp(false);
+    setShowEditExpensePopUp(false);
     setShowOptionsPopUp(false);
-    setShowDeleteJobPopUp(false);
+    setShowDeleteExpensePopUp(false);
     document.body.style.overflow = 'auto';
   };
 
   return (
     <div className='job-box-container'>
-      <p className='academic-page-box-header'>Internship Applications</p>
-      <p className='academic-page-box-subheader' style={{padding: '0px 0px 30px 0px'}}>Here are the list of internships that you have applied for. All the best!</p>
+      <p className='academic-page-box-header'>Expenses</p>
+      <p className='academic-page-box-subheader' style={{padding: '0px 0px 30px 0px'}}>Here are the list of your expenses!</p>
       <div style={{padding: '0px 0px 20px 0px'}}>
         <Button 
           sx={{
@@ -70,30 +71,26 @@ const JobBox = () => {
               backgroundColor: '#333333'
             }
           }}
-          onClick={handleAddJobClick}
+          onClick={handleAddExpenseClick}
           >
           <AddCircleOutlineIcon sx={{fontSize: '15px'}}/>
-          <p style={{fontSize:'15px'}}>{'\u00A0Add Internship'}</p>
+          <p style={{fontSize:'15px'}}>{'\u00A0Add Expense'}</p>
         </Button>
       </div>
       <div className="scroll-container" style={{height: '480px', width: '100%'}}>
       <div className='scroll-container-element-container'>
-        <div className="scroll-container-element" style={{width: '60px', color: '#a3a3a3'}}>ID</div>
-        <div className="scroll-container-element" style={{width: '200px', color: '#a3a3a3'}}>Company</div>
-        <div className="scroll-container-element" style={{width: '280px', color: '#a3a3a3'}}>Position</div>
-        <div className="scroll-container-element" style={{width: '170px', color: '#a3a3a3'}}>Status</div>
-        <div className="scroll-container-element" style={{width: '150px', color: '#a3a3a3'}}>Next Deadline</div>
-        <div className="scroll-container-element" style={{width: '200px', color: '#a3a3a3'}}>Remarks</div>
-        <div className="scroll-container-element" style={{width: '80px', color: '#a3a3a3'}}></div>
+        <div className="scroll-container-element" style={{width: '60px', color: '#a3a3a3', fontSize: '16px'}}>ID</div>
+        <div className="scroll-container-element" style={{width: '350px', color: '#a3a3a3', fontSize: '16px'}}>Description</div>
+        <div className="scroll-container-element" style={{width: '150px', color: '#a3a3a3', fontSize: '16px'}}>Expense</div>
+        <div className="scroll-container-element" style={{width: '170px', color: '#a3a3a3', fontSize: '16px'}}>Date</div>
+        <div className="scroll-container-element" style={{width: '80px', color: '#a3a3a3', fontSize: '16px'}}></div>
       </div>
-      {jobData && jobData.map(item => (
+      {financeData && financeData.map(item => (
         <div key={item.id} className="scroll-container-element-container">
-        <div className="scroll-container-element" style={{width: '60px'}}>{item.id}</div>
-        <div className="scroll-container-element" style={{width: '200px'}}>{item.company}</div>
-        <div className="scroll-container-element" style={{width: '280px'}}>{item.position}</div>
-        <div className="scroll-container-element" style={{width: '170px'}}>{item.status}</div>
-        <div className="scroll-container-element" style={{width: '150px'}}>{item.next_deadline}</div>
-        <div className="scroll-container-element" style={{width: '200px'}}>{item.remarks}</div>
+        <div className="scroll-container-element" style={{width: '60px', fontSize: '16px'}}>{item.id}</div>
+        <div className="scroll-container-element" style={{width: '350px', fontSize: '16px'}}>{item.description}</div>
+        <div className="scroll-container-element" style={{width: '150px', fontSize: '16px', fontWeight: '600', color: item.amount.startsWith('-') ? 'red' : 'lime'}}>SGD {item.amount}</div>
+        <div className="scroll-container-element" style={{width: '170px', fontSize: '16px'}}>{formatDateTime(item.dateTime)}</div>
         <div className="scroll-container-element" style={{width: '80px', justifyContent: 'center'}}>
         <Button
           sx={{
@@ -116,34 +113,34 @@ const JobBox = () => {
         </div>
       ))}
       </div>
-      {showAddJobPopUp && (
-        <div className='pop-up-overlay'>
-          <div className="pop-up-background" onClick={handlePopUpClose}/>
-          <div className="pop-up-content">
-            <AddJobPopUp onClose={setShowAddJobPopUp}/> 
-          </div>
-        </div> 
-      )}
       {showOptionsPopUp && (
         <div className='pop-up-overlay' onClick={handleDontShowOptionsPopUp}>
           <div style={{ position: 'absolute', top: popUpPosition.y, left: popUpPosition.x }}>
-            <OptionsPopUp onEditClick={handleEditJobClick} onDeleteClick={handleDeleteJobClick}/>
+            <OptionsPopUp onEditClick={handleEditExpenseClick} onDeleteClick={handleDeleteExpenseClick}/>
           </div>
         </div>
       )}
-      {showDeleteJobPopUp && (
+      {showDeleteExpensePopUp && (
       <div className="pop-up-overlay">
         <div className="pop-up-background" onClick={handlePopUpClose} />
         <div className="pop-up-content">
-          <DeletePopUp onClose={setShowDeleteJobPopUp} />
+          <DeletePopUp onClose={setShowDeleteExpensePopUp} />
         </div>
       </div>
     )}
-    {showEditJobPopUp && (
+    {showAddExpensePopUp && (
+        <div className="pop-up-overlay">
+          <div className="pop-up-background" onClick={handlePopUpClose} />
+          <div className="pop-up-content">
+            <AddExpensesPopUp onClose={setShowAddExpensePopUp} />
+          </div>
+        </div>
+      )}
+      {showEditExpensePopUp && (
       <div className="pop-up-overlay">
         <div className="pop-up-background" onClick={handlePopUpClose} />
         <div className="pop-up-content">
-          <EditJobPopUp onClose={setShowEditJobPopUp} />
+          <EditExpensesPopUp onClose={setShowEditExpensePopUp} />
         </div>
       </div>
     )}
@@ -151,4 +148,4 @@ const JobBox = () => {
   );
 }
 
-export default JobBox
+export default FinanceBox

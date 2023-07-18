@@ -93,7 +93,7 @@ const FinanceBox = () => {
           <p style={{fontSize: '16px'}}>{item.description}</p>
             <p style={{color: '#A1A1A1', fontSize: '12px'}}>{formatDateTime(item.dateTime)}</p>
           </div>
-          <p style={{color:'red', fontSize: '15px', fontWeight: '600'}}>SGD -11.60</p>
+          <p style={{color:'red', fontSize: '14px', fontWeight: '600'}}>SGD -11.60</p>
         </div>
       ))}
     </div>
