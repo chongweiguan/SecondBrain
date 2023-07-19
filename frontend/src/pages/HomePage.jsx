@@ -9,13 +9,33 @@ import JobBox from '../components/HomePage/JobBox';
 import Time from '../components/Others/Time';
 import Weather from '../components/Others/Weather';
 import CurrentDay from '../components/Others/CurrentDay';
+import NavBar from '../components/Others/NavBar';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import "../App.css"
 
 const HomePage = () => {
-
+  const [auth, setAuth] = useState(false);
+  const [id, setId] = useState('');
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const navigate = useNavigate();
+
+  axios.defaults.withCredentials = true;
 
   useEffect(() => {
+    axios.get('http://localhost:3001/api')
+      .then(res => {
+        console.log(res);
+        if(res.data.Status === "Success") {
+          setAuth(true);
+          setId(res.data.id);
+        } else {
+          setAuth(false);
+          navigate("/login")
+        }
+      })
+      .catch(err => console.log(err));
+
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 1350);
     };
@@ -26,15 +46,27 @@ const HomePage = () => {
     };
   }, []);
 
+  const handleLogout = () => {
+    axios.get('http://localhost:3001/api/logout')
+    .then(res => {
+      location.reload(true);
+    }).catch(err => console.log(err));
+  }
+
   return (
     <div className="black-background">
       <Banner bannerPath={banner1} logo={'👾'} />
-      <h1 className="page-header">
-          &#123; Simple Second Brain &#125;
-        </h1>
-      <h1 className="page-subHeader">
-          ⚓ &nbsp;&nbsp;Welcome, Wei Guan !
-        </h1>
+      <div style={{display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: isSmallScreen ? 'column' : 'row'}}>
+        <div>
+          <h1 className="page-header">
+            &#123; Simple Second Brain &#125;
+          </h1>
+          <h1 className="page-subHeader">
+            ⚓ &nbsp;&nbsp;Welcome, {id} !
+          </h1>
+        </div>
+        <NavBar logout={handleLogout}/>
+      </div>
         <hr className="line-break" />
         <div 
           width='500px'

@@ -56,7 +56,7 @@ const FinanceBox = () => {
   };
 
   return (
-    <div className='job-box-container'>
+    <div className='finance-box-container'>
       <p className='academic-page-box-header'>Expenses</p>
       <p className='academic-page-box-subheader' style={{padding: '0px 0px 30px 0px'}}>Here are the list of your expenses!</p>
       <div style={{padding: '0px 0px 20px 0px'}}>

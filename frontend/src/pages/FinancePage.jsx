@@ -1,4 +1,4 @@
-import React from 'react'
+import { React, useState, useEffect } from 'react';
 import Banner from '../components/Others/Banner'
 import banner2 from '../assets/banner2.mp4';
 import { Doughnut } from 'react-chartjs-2';
@@ -7,6 +7,9 @@ import { financeData } from '../data/dummy';
 import { formatDateTime } from '../utils/DateTimeParser';
 import Button from '@mui/material/Button';
 import FinanceBox from '../components/FinancePage/FinanceBox';
+import NavBar from '../components/Others/NavBar';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 Chart.register(ArcElement);
 
@@ -74,6 +77,42 @@ const DonutChart = ({ percentage }) => {
 
 const FinancePage = () => {
 
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [auth, setAuth] = useState(false);
+  const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/api')
+      .then(res => {
+        console.log(res);
+        if(res.data.Status === "Success") {
+          setAuth(true);
+          setId(res.data.id);
+        } else {
+          setAuth(false);
+          navigate("/login")
+        }
+      })
+      .catch(err => console.log(err));
+
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 1350);
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    axios.get('http://localhost:3001/api/logout')
+    .then(res => {
+      location.reload(true);
+    }).catch(err => console.log(err));
+  }
+
   // Get the current month (0 - January, 1 - February, etc.)
   const currentMonth = new Date().getMonth() + 1;
 
@@ -97,12 +136,17 @@ const FinancePage = () => {
   return (
     <div className="black-background">
       <Banner bannerPath={banner2} logo={'💵'} />
-      <h1 className="page-header">
-          &#123; Expenses & Finances &#125;
-        </h1>
-        <h1 className="page-subHeader">
-          💰 &nbsp;&nbsp;Money, Money, Money
-        </h1>
+      <div style={{display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: isSmallScreen ? 'column' : 'row'}}>
+        <div>
+          <h1 className="page-header">
+            &#123; Expenses & Finances &#125;
+          </h1>
+          <h1 className="page-subHeader">
+            💰 &nbsp;&nbsp;Money, Money, Money
+          </h1>
+        </div>
+        <NavBar logout={handleLogout}/>
+      </div>
         <hr className="line-break" />
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px'}}>
           <p style={{fontSize: '20px'}}>Period: 1 July 2023 - 31 July 2023</p>
@@ -227,7 +271,7 @@ const FinancePage = () => {
           >July</Button>
           </div>
         </div>
-        <div style={{padding: '50px 200px 50px 200px'}}>
+        <div style={{padding: '50px', display: 'flex', justifyContent: 'center'}}>
           <FinanceBox />
         </div>
     </div>

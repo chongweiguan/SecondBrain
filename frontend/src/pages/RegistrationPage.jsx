@@ -1,13 +1,37 @@
 import { React, useState, useEffect } from 'react';
 import banner5 from '../assets/banner5.mp4';
-import AuthBanner from '../components/Others/AuthBanner';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
-import google from '../assets/google-icon.png';
+import axios from 'axios';
+
 
 const RegistrationPage = () => {
 
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  const navigate = useNavigate();
+
+  const [values, setValues] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    leetcode: "",
+    password: "",
+    confirmPassword: "",
+  })
+
+  const handleSubmit = (event) => {
+    event.preventDefault()  
+    axios.post('http://localhost:3001/api/register', values)
+    .then(res => {
+      if(res.data.Status === "Success") {
+        navigate("/login");
+      } else {
+        alert("Error");
+      }
+    })
+    .then(err => console.log(err));
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,8 +54,8 @@ const RegistrationPage = () => {
       style={{
         overflow: 'hidden', 
         height: '100vh', 
-        width: '25%',
-        minWidth: '550px'
+        width: '45%',
+        minWidth: '625px'
       }}>
       <video
         style={{ width: '100%', objectFit: 'cover', bottom: 0, transform: 'translateY(-5%)' }}
@@ -40,7 +64,7 @@ const RegistrationPage = () => {
         loop
         muted
       />
-      </div>
+    </div>
     }
     <div 
     style={{
@@ -66,12 +90,17 @@ const RegistrationPage = () => {
             <div>
               <p style={{fontWeight: '500', fontSize: '13px', padding: '0px 0px 5px 0px'}}>First Name *</p>
               <input
-                type="text" name="" required className="inputField" style={{width: '310px', height: '35px', fontSize: '15px', borderRadius: '3px'}}
+                type="text" 
+                name="" 
+                required
+                onChange={e => setValues({...values, firstname: e.target.value})}
+                className="inputField" style={{width: '310px', height: '35px', fontSize: '15px', borderRadius: '3px'}}
               />
             </div>
             <div>
               <p style={{fontWeight: '500', fontSize: '13px', padding: '0px 0px 5px 0px'}}>Last Name</p>
               <input
+                onChange={e => setValues({...values, lastname: e.target.value})}
                 type="text" name="" required className="inputField" style={{width: '310px', height: '35px', fontSize: '15px', borderRadius: '3px'}}
               />
             </div>
@@ -80,12 +109,14 @@ const RegistrationPage = () => {
             <div>
               <p style={{fontWeight: '500', fontSize: '13px', padding: '0px 0px 5px 0px'}}>Email *</p>
               <input
+                onChange={e => setValues({...values, email: e.target.value})}
                 type="text" name="" required className="inputField" style={{width: '310px', height: '35px', fontSize: '15px', borderRadius: '3px'}}
               />
             </div>
             <div>
               <p style={{fontWeight: '500', fontSize: '13px', padding: '0px 0px 5px 0px'}}>Leetcode username</p>
               <input
+                onChange={e => setValues({...values, leetcode: e.target.value})}
                 type="text" name="" required className="inputField" style={{width: '310px', height: '35px', fontSize: '15px', borderRadius: '3px'}}
               />
             </div>
@@ -94,12 +125,14 @@ const RegistrationPage = () => {
             <div>
               <p style={{fontWeight: '500', fontSize: '13px', padding: '0px 0px 5px 0px'}}>Password *</p>
               <input
+                onChange={e => setValues({...values, password: e.target.value})}
                 type="password" name="" required className="inputField" style={{width: '310px', height: '35px', fontSize: '15px', borderRadius: '3px'}}
               />
             </div>
             <div>
               <p style={{fontWeight: '500', fontSize: '13px', padding: '0px 0px 5px 0px'}}>Confirm Password *</p>
               <input
+                onChange={e => setValues({...values, confirmPassword: e.target.value})}
                 type="password" name="" required className="inputField" style={{width: '310px', height: '35px', fontSize: '15px', borderRadius: '3px'}}
               />
             </div>
@@ -108,6 +141,7 @@ const RegistrationPage = () => {
       </div>
       <div style={{padding: '40px 0px 0px 0px'}}>
         <Button
+          onClick={handleSubmit}
           sx={{
             fontWeight: '600',
             backgroundColor: 'black',

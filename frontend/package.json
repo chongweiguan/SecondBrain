@@ -29,6 +29,7 @@
     "@syncfusion/ej2-react-schedule": "^21.2.6",
     "@tanstack/react-table": "^8.9.3",
     "add": "^2.0.6",
+    "axios": "^1.4.0",
     "button": "^1.1.1",
     "card": "^2.5.4",
     "chart.js": "^4.3.0",

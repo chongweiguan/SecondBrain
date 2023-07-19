@@ -1,13 +1,35 @@
 import { React, useState, useEffect } from 'react';
 import banner4 from '../assets/banner4.mp4';
 import AuthBanner from '../components/Others/AuthBanner';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import google from '../assets/google-icon.png';
+import axios from 'axios';
 
 const LoginPage = () => {
 
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
+
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+  })
+
+  const handleSubmit = (event) => {
+    event.preventDefault()  
+    axios.post('http://localhost:3001/api/login', values)
+    .then(res => {
+      if(res.data.Status === "Success") {
+        navigate("/");
+      } else {
+        alert(res.data.Error);
+      }
+    })
+    .then(err => console.log(err));
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -45,10 +67,12 @@ const LoginPage = () => {
       <div style={{display: 'flex', flexDirection: 'column', gap:'10px'}}>
       <p style={{fontWeight:'600', padding: '10px 0px'}}>Login Account</p>
       <input
+        onChange={e => setValues({...values, email: e.target.value})}
         type="text" name="" required className="inputField" style={{width: '400px', height: '35px', fontSize: '17px'}}
         placeholder="Email Address"
       />
       <input
+        onChange={e => setValues({...values, password: e.target.value})}
         name="" required className="inputField" style={{width: '400px', height: '35px', fontSize: '17px'}}
         placeholder="Password"
         type="password"
@@ -63,6 +87,7 @@ const LoginPage = () => {
       </div>
       <div style={{padding: '30px 0px 0px 0px'}}>
       <Button
+        onClick={handleSubmit}
         sx={{
         fontWeight: '600',
         backgroundColor: 'black',

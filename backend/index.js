@@ -1,26 +1,108 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const app = express();
-const mysql = require('mysql');
-const dotenv = require('dotenv');
+import express from 'express';
+import cors from 'cors';
+import jwt from 'jsonwebtoken';
+import mysql from 'mysql';
+import bcrypt from 'bcrypt';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-const db = mysql.createPool({
+const app = express();
+
+const salt = 10;
+
+const db = mysql.createConnection({
   host: process.env.DBHOST,
-  user: process.env.USER,
+  user: process.env.DBUSER,
   password: process.env.DBPASSWORD,
   database: process.env.DB
 });
 
-app.use(cors());
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors({
+  origin: ['http://localhost:5173'],
+  methods: ['POST', 'GET'],
+  credentials: true
+}));
+
+app.listen(3001, () => {
+  console.log("backend is running on port 3001");
+});
 
 app.get("/", (req, res) => {
   res.send("Hello! The secondbrain db is working");
 });
+
+/* REGISTRATION AND LOGIN*/ 
+app.post('/api/register', (req, res) => {
+  const sql = "INSERT INTO login (`firstname`, `lastname`, `leetcode`, `email`, `password`) VALUES (?)";
+  bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
+    if (err) return res.json({Error: 'Error hashing password'});
+    const values = [
+      req.body.firstname,
+      req.body.lastname,
+      req.body.leetcode,
+      req.body.email,
+      hash
+    ]
+    db.query(sql, [values], (err, result) => {
+      if (err) {
+        console.error("Error inserting data in the database:", err);
+        return res.json({ Error: "Inserting data error in server" });
+      }
+      return res.json({ Status: "Success" });
+    })
+  })
+});
+
+app.post('/api/login', (req, res) => {
+  const sql = "SELECT * FROM login WHERE email = ?";
+  db.query(sql, [req.body.email], (err, data) => {
+    if (err) return res.json({Error: "Login error in server"});
+    if(data.length > 0) {
+      bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
+        if(err) return res.json({Error: "Password does not match"});
+        if(response) {
+          const id = data[0].id;
+          const token = jwt.sign({id}, "jwt-secret-key", {expiresIn: '1d'});
+          res.cookie('token', token);
+          return res.json({Status: "Success"});
+        } else {
+          return res.json({Error: "Password does not match"});
+        }
+      })
+    } else {
+      return res.json({Error: "Email does not exist"});
+    }
+  })
+});
+
+const verifyUser = (req, res, next) => {
+  const token = req.cookies.token;
+  if(!token) {
+    return res.json({Error: 'You are not authenticated'});
+  } else {
+    jwt.verify(token, "jwt-secret-key", (err, decoded) => {
+      if(err) {
+        return res.json({Error: "Token is not valid"});
+      } else {
+        req.id = decoded.id;
+        next();
+      }
+    })
+  }
+}
+
+app.get('/api', verifyUser, (req, res) => {
+  return res.json({Status: "Success", id: req.id});
+})
+
+app.get('/api/logout', (req, res) => {
+  res.clearCookie('token');
+  return res.json({Status: "Success"});
+})
 
 /* FINANCE */
 app.get("/api/getfinance", (req, res) => {
@@ -394,9 +476,3 @@ app.get("/api/getmodules", (req, res) => {
       }
     });
   });
-
-
-
-app.listen(3001, () => {
-  console.log("backend is running on port 3001");
-});

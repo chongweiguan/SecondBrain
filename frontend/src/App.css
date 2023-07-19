@@ -47,7 +47,17 @@ p, h1, h2, h3, h4 {
 
 .job-box-container {
   background-color: black;
-  width: 100%;
+  width: 1200px;
+  height: 700px;
+  border-radius: 8px;
+  padding: 25px 30px;
+  border: 2px solid #333333;
+  min-width: 800px;
+}
+
+.finance-box-container {
+  background-color: black;
+  width: 1050px;
   height: 700px;
   border-radius: 8px;
   padding: 25px 30px;

@@ -5,12 +5,30 @@ import AssignmentBox from '../components/AcademicPage/AssignmentBox';
 import ExamBox from '../components/AcademicPage/ExamBox';
 import ModuleBox from '../components/AcademicPage/ModuleBox';
 import ModuleProgress from '../components/AcademicPage/ModuleProgress';
+import NavBar from '../components/Others/NavBar';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const AcademicPage = () => {
 
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [auth, setAuth] = useState(false);
+  const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
 
   useEffect(() => {
+    axios.get('http://localhost:3001/api')
+      .then(res => {
+        console.log(res);
+        if(res.data.Status === "Success") {
+          setAuth(true);
+          setId(res.data.id);
+        } else {
+          setAuth(false);
+          navigate("/login")
+        }
+      })
+      .catch(err => console.log(err));
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 1350);
     };
@@ -21,15 +39,27 @@ const AcademicPage = () => {
     };
   }, []);
 
+  const handleLogout = () => {
+    axios.get('http://localhost:3001/api/logout')
+    .then(res => {
+      location.reload(true);
+    }).catch(err => console.log(err));
+  }
+
   return (
     <div className="black-background">
       <Banner bannerPath={banner3} logo={'📔'} />
-      <h1 className="page-header">
-          &#123; Education & Academics &#125;
-        </h1>
-        <h1 className="page-subHeader">
-          📖 &nbsp;&nbsp;Just keep going!
-        </h1>
+      <div style={{display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: isSmallScreen ? 'column' : 'row'}}>
+        <div>
+          <h1 className="page-header">
+            &#123; Education & Academics &#125;
+          </h1>
+          <h1 className="page-subHeader">
+            📖 &nbsp;&nbsp;Just keep going!
+          </h1>
+        </div>
+        <NavBar logout={handleLogout}/>
+      </div>
         <hr className="line-break" />
         <div style={{ textAlign: 'center' }}>
           <p style={{
