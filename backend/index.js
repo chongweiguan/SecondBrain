@@ -37,7 +37,7 @@ app.get("/", (req, res) => {
 
 /* REGISTRATION AND LOGIN*/ 
 app.post('/api/register', (req, res) => {
-  const sql = "INSERT INTO login (`firstname`, `lastname`, `leetcode`, `email`, `password`) VALUES (?)";
+  const sql = "INSERT INTO user (`firstname`, `lastname`, `leetcode`, `email`, `password`) VALUES (?)";
   bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
     if (err) return res.json({Error: 'Error hashing password'});
     const values = [
@@ -58,7 +58,7 @@ app.post('/api/register', (req, res) => {
 });
 
 app.post('/api/login', (req, res) => {
-  const sql = "SELECT * FROM login WHERE email = ?";
+  const sql = "SELECT * FROM user WHERE email = ?";
   db.query(sql, [req.body.email], (err, data) => {
     if (err) return res.json({Error: "Login error in server"});
     if(data.length > 0) {
@@ -66,7 +66,7 @@ app.post('/api/login', (req, res) => {
         if(err) return res.json({Error: "Password does not match"});
         if(response) {
           const id = data[0].id;
-          const token = jwt.sign({id}, "jwt-secret-key", {expiresIn: '1d'});
+          const token = jwt.sign({id}, process.env.JWTKEY, {expiresIn: '1d'});
           res.cookie('token', token);
           return res.json({Status: "Success"});
         } else {
@@ -84,7 +84,7 @@ const verifyUser = (req, res, next) => {
   if(!token) {
     return res.json({Error: 'You are not authenticated'});
   } else {
-    jwt.verify(token, "jwt-secret-key", (err, decoded) => {
+    jwt.verify(token, process.env.JWTKEY, (err, decoded) => {
       if(err) {
         return res.json({Error: "Token is not valid"});
       } else {
