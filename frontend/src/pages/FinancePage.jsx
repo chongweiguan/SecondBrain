@@ -3,7 +3,6 @@ import Banner from '../components/Others/Banner'
 import banner2 from '../assets/banner2.mp4';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement } from 'chart.js';
-import { financeData } from '../data/dummy';
 import { formatDateTime } from '../utils/DateTimeParser';
 import Button from '@mui/material/Button';
 import FinanceBox from '../components/FinancePage/FinanceBox';
@@ -77,25 +76,42 @@ const DonutChart = ({ percentage }) => {
 
 const FinancePage = () => {
 
+  const[financeData, setFinanceData] = useState(null);
+
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [auth, setAuth] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
-  useEffect(() => {
-    axios.get('http://localhost:3001/api')
-      .then(res => {
-        console.log(res);
-        if(res.data.Status === "Success") {
-          setAuth(true);
-          setId(res.data.id);
-        } else {
-          setAuth(false);
-          navigate("/login")
-        }
-      })
-      .catch(err => console.log(err));
+  const getFinanceData = async () => {
+    try {
+      axios.get(`http://localhost:3001/api/getfinance/${user.id}`)
+        .then(res => {
+          console.log(user.id)
+          setFinanceData(res.data);
+        })
+    } catch (err) {
+      console.error(err);
+      alert("Error occurred fetching finance Data")
+    }
+  }
 
+  const auth = async () => {
+    try {
+      const res = await axios.get('http://localhost:3001/api/login');
+      console.log(res);
+      if (res.data.loggedIn) {
+        setUser(res.data.user);
+      } else {
+        navigate("/login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    auth();
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 1350);
     };
@@ -106,6 +122,12 @@ const FinancePage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      getFinanceData();
+    }
+  }, [user]);
+
   const handleLogout = () => {
     axios.get('http://localhost:3001/api/logout')
     .then(res => {
@@ -113,25 +135,22 @@ const FinancePage = () => {
     }).catch(err => console.log(err));
   }
 
-  // Get the current month (0 - January, 1 - February, etc.)
-  const currentMonth = new Date().getMonth() + 1;
-
-  // Filter the financeData for the current month
-  const filteredData = financeData.filter((item) => {
-    const [day, month, year] = item.dateTime.split('/'); // Split the date components
-    const dateTime = new Date(`${year}-${month}-${day}`);
-    const itemMonth = dateTime.getMonth() + 1;
-    return itemMonth === currentMonth;
-  });
+  if(!financeData) {
+    return null;
+  }
 
   // Calculate the total spent for the current month
-  const totalSpent = filteredData.reduce((total, item) => total - parseFloat(item.amount), 0);
+  const totalSpent = 100;
 
   // Define the total budget
   const totalBudget = 800;
 
   // Calculate the percentage spent
-  const percentageSpent = ((totalSpent / totalBudget) * 100).toFixed(2);;
+  const percentageSpent = ((totalSpent / totalBudget) * 100).toFixed(2);
+
+  const months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ]
 
   return (
     <div className="black-background">
@@ -183,96 +202,30 @@ const FinancePage = () => {
           </div>
         </div>
         <hr className="line-break" />
-        <div>
-          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '60px'}}>
-          <Button
-            sx={{
-              width: '120px',
-              fontSize: '17px',
-              color: 'white', 
-              border: '1px solid #5A5A5A', 
-              borderRadius: '10px', 
-              padding: '5px 8px', 
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#333333'
-              }
-            }}
-          >February</Button>
-          <Button
-            sx={{
-              width: '120px',
-              fontSize: '17px',
-              color: 'white', 
-              border: '1px solid #5A5A5A', 
-              borderRadius: '10px', 
-              padding: '5px 8px', 
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#333333'
-              }
-            }}
-          >March</Button>
-          <Button
-            sx={{
-              width: '120px',
-              fontSize: '17px',
-              color: 'white', 
-              border: '1px solid #5A5A5A', 
-              borderRadius: '10px', 
-              padding: '5px 8px', 
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#333333'
-              }
-            }}
-          >April</Button>
-          <Button
-            sx={{
-              width: '120px',
-              fontSize: '17px',
-              color: 'white', 
-              border: '1px solid #5A5A5A', 
-              borderRadius: '10px', 
-              padding: '5px 8px', 
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#333333'
-              }
-            }}
-          >May</Button>
-          <Button
-            sx={{
-              width: '120px',
-              fontSize: '17px',
-              color: 'white', 
-              border: '1px solid #5A5A5A', 
-              borderRadius: '10px', 
-              padding: '5px 8px', 
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#333333'
-              }
-            }}
-          >June</Button>
-          <Button
-            sx={{
-              width: '120px',
-              fontSize: '17px',
-              color: 'white', 
-              border: '1px solid #5A5A5A', 
-              borderRadius: '10px', 
-              padding: '5px 8px', 
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#333333'
-              }
-            }}
-          >July</Button>
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '50px', flexWrap: 'wrap', width: '1100px'}}>
+            {months && months.map((month, idx) => (
+              <div>
+                <Button
+                sx={{
+                  width: '120px',
+                  fontSize: '17px',
+                  color: 'white', 
+                  border: '1px solid #5A5A5A', 
+                  borderRadius: '10px', 
+                  padding: '5px 8px', 
+                  textTransform: 'none',
+                  '&:hover': {
+                    backgroundColor: '#333333'
+                  }
+                }}
+              >{month}</Button>
+              </div>
+             ))}
           </div>
         </div>
         <div style={{padding: '50px', display: 'flex', justifyContent: 'center'}}>
-          <FinanceBox />
+          <FinanceBox user={user} financeData={financeData} getData={getFinanceData}/>
         </div>
     </div>
   )

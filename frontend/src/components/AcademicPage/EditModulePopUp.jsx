@@ -1,10 +1,15 @@
 import {React, useState} from "react";
 import { Button } from "@mui/material";
+import axios from "axios";
 
-const EditModulePopUp = ({ onClose }) => {
+const EditModulePopUp = ({ onClose, item, onEdit }) => {
+
+  const [moduleCode, setModuleCode] = useState(item.module_code);
+  const [moduleDescription, setModuleDescription] = useState(item.description);
+  const [mc, setMC] = useState(item.mc);
 
   const [showTypePicker, setTypePicker] = useState(false);
-  const [selectedType, setSelectedType] = useState(null);
+  const [selectedType, setSelectedType] = useState(item.type);
   
   
   const handleShowTypePicker = () => { 
@@ -94,6 +99,27 @@ const EditModulePopUp = ({ onClose }) => {
       </div>
     )
   }
+
+  const handleUpdateModule = () => {
+    const id = item.id;
+    const moduleData = {
+      module_code: moduleCode,
+      description: moduleDescription,
+      type: selectedType,
+      mc: mc
+    }
+
+    axios.put(`http://localhost:3001/api/updatemodules/?id=${id}`, moduleData)
+      .then(res => {
+        console.log(res.data);
+        onEdit();
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Error occurred while updating the module")
+      });
+      onClose(false);
+  }
   
   return (
     <div className='pop-up-container' style={{
@@ -123,7 +149,9 @@ const EditModulePopUp = ({ onClose }) => {
           }}>
             <p style={{fontSize:'18px', fontWeight: '520'}}>Module Code</p>
           <input
+            value={moduleCode}
             type="text" name="" required className="inputField" style={{width: '190px', height: '35px', fontSize: '17px'}}
+            onChange={e => setModuleCode(e.target.value)}
           />
             </div>
             <div 
@@ -135,6 +163,8 @@ const EditModulePopUp = ({ onClose }) => {
             <p style={{fontSize:'18px', fontWeight: '520'}}>MC</p>
             <input
               type="text" name="" required className="inputField" style={{width: '70px', height: '35px', fontSize: '17px'}}
+              value={mc}
+              onChange={e => setMC(e.target.value)}
             />
             </div>
         </div>
@@ -148,6 +178,8 @@ const EditModulePopUp = ({ onClose }) => {
             <p style={{fontSize:'18px', fontWeight: '520'}}>{'Module Desc.'}</p>
             <input
             type="text" name="" required className="inputField" style={{width: '325px', height: '35px', fontSize: '17px'}}
+            value={moduleDescription}
+            onChange={e => setModuleDescription(e.target.value)}
             />
         </div>
         <div 
@@ -222,7 +254,7 @@ const EditModulePopUp = ({ onClose }) => {
                 backgroundColor: 'white'
             }
             }}
-            onClick={handleCancel}
+            onClick={handleUpdateModule}
         >Confirm</Button>
         </div>
     </div>

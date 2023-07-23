@@ -1,5 +1,5 @@
 import {React, useEffect, useState} from 'react';
-import { moduleData } from '../../data/dummy';
+import ModuleProgress from './ModuleProgress';
 import Button from "@mui/material/Button";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddModulePopUp from './AddModulePopUp';
@@ -7,15 +7,37 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import OptionsPopUp from '../Others/OptionsPopUp';
 import EditModulePopUp from './EditModulePopUp';
 import DeletePopUp from '../Others/DeletePopUp';
+import axios from 'axios';
 
-const ModuleBox = () => {
-
+const ModuleBox = ({user}) => {
+    const [moduleData, setModuleData] = useState(null)
+    
     const [showOptionsPopUp, setShowOptionsPopUp] = useState(false);
     const [popUpPosition, setPopUpPosition] = useState({ x: 0, y: 0 });
 
     const [showAddModulePopUp, setShowAddModulePopUp] = useState(false);
     const [showEditModulePopUp, setShowEditModulePopUp] = useState(false);
     const [showDeleteModulePopUp, setShowDeleteModulePopUp] = useState(false);
+
+    const [selectedItem, setSelectedItem] = useState(null);
+
+    const getModuleData = async () => {
+      try {
+        axios.get(`http://localhost:3001/api/getmodules/${user.id}`)
+          .then(res => {
+            setModuleData(res.data);
+          })
+      } catch (err) {
+        console.error(err);
+        alert("Error occurred fetching Module Data")
+      }
+    }
+
+    useEffect(() => {
+      if (user && user.id) {
+        getModuleData();
+      }
+    }, [user]);
 
     const handleShowOptionsPopUp = (event) => {
       const x = event.clientX - 10;
@@ -58,6 +80,7 @@ const ModuleBox = () => {
     };
   
     return (
+    <div style={{display:'flex', alignItems: 'center', gap:'20px'}}>
     <div className="academic-page-box-container" style={{width: '750px'}}>
       <p className='academic-page-box-header'>Modules</p>
       <p className='academic-page-box-subheader' style={{padding: '0px 0px 30px 0px'}}>Here's a list of Modules taken!</p>
@@ -88,11 +111,11 @@ const ModuleBox = () => {
         <div className="scroll-container-element" style={{width: '60px', color: '#a3a3a3', justifyContent: 'center'}}>MC</div>
         <div className="scroll-container-element" style={{width: '50px', color: '#a3a3a3'}}></div>
       </div>
-      {moduleData && moduleData.map(item => (
+      {moduleData && moduleData.map((item, idx) => (
         <div key={item.id} className="scroll-container-element-container">
-        <div className="scroll-container-element" style={{width: '60px'}}>{item.id}</div>
-        <div className="scroll-container-element" style={{width: '120px'}}>{item.moduleCode}</div>
-        <div className="scroll-container-element" style={{width: '280px'}}>{item.moduleDesc}</div>
+        <div className="scroll-container-element" style={{width: '60px'}}>{idx+1}</div>
+        <div className="scroll-container-element" style={{width: '120px'}}>{item.module_code}</div>
+        <div className="scroll-container-element" style={{width: '280px'}}>{item.description}</div>
         <div className="scroll-container-element" style={{width: '170px', justifyContent: 'center'}}>{item.type}</div>
         <div className="scroll-container-element" style={{width: '60px', justifyContent: 'center'}}>{item.mc}</div>
         <div className="scroll-container-element" style={{width: '50px', justifyContent: 'center'}}>
@@ -104,7 +127,10 @@ const ModuleBox = () => {
               backgroundColor: '#333333'
             }
           }}
-          onClick={(event) => handleShowOptionsPopUp(event)}
+          onClick={(event) => {
+            handleShowOptionsPopUp(event)
+            setSelectedItem(item)
+          }}
         >
           <MoreHorizIcon 
             sx={{
@@ -127,7 +153,7 @@ const ModuleBox = () => {
         <div className='pop-up-overlay'>
           <div className="pop-up-background" onClick={handlePopUpClose}/>
           <div className="pop-up-content">
-            <AddModulePopUp onClose={setShowAddModulePopUp}/> 
+            <AddModulePopUp onClose={setShowAddModulePopUp} user={user} onAdd={(getModuleData)}/> 
           </div>
         </div> 
       )}
@@ -135,7 +161,7 @@ const ModuleBox = () => {
       <div className="pop-up-overlay">
         <div className="pop-up-background" onClick={handlePopUpClose} />
         <div className="pop-up-content">
-          <EditModulePopUp onClose={setShowEditModulePopUp} />
+          <EditModulePopUp onClose={setShowEditModulePopUp} item={selectedItem} onEdit={getModuleData}/>
         </div>
       </div>
     )}
@@ -143,10 +169,12 @@ const ModuleBox = () => {
       <div className="pop-up-overlay">
         <div className="pop-up-background" onClick={handlePopUpClose} />
         <div className="pop-up-content">
-          <DeletePopUp onClose={setShowDeleteModulePopUp} />
+          <DeletePopUp onClose={setShowDeleteModulePopUp} item={selectedItem} onDelete={getModuleData} type='modules'/>
         </div>
       </div>
     )}
+    </div>
+    <ModuleProgress moduleData={moduleData}/>
     </div>
     )
 }

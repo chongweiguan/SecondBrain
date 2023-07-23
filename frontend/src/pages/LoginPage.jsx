@@ -22,7 +22,7 @@ const LoginPage = () => {
     event.preventDefault()  
     axios.post('http://localhost:3001/api/login', values)
     .then(res => {
-      if(res.data.Status === "Success") {
+      if(res.data) {
         navigate("/");
       } else {
         alert(res.data.Error);

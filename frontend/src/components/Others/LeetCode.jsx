@@ -14,7 +14,6 @@ const LeetCode = () => {
         const response = await fetch('https://leetcode-stats-api.herokuapp.com/weiguanchong123');
         const data = await response.json();
         setLeetcodeData(data);
-        console.log(leetcodeData);
       } catch (error) {
         console.error(error);
       }

@@ -4,12 +4,36 @@ import AccessTime from '@mui/icons-material/AccessTime';
 import { Button } from "@mui/material";
 import Calendar from "../Others/Calendar";
 import TimePicker from "../Others/TimePicker";
+import axios from "axios";
 
 
-const EditExpensesPopUp = ({ onClose }) => {
+const EditExpensesPopUp = ({ onClose, item, onEdit }) => {
 
-  const [selectedDate, setSelectedDate] = useState("\u00A0");
+  const [description, setDescription] = useState(item.description);
+  const [expense, setExpense] = useState(item.amount);
+  
+  const [selectedDate, setSelectedDate] = useState(item.date);
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const handleUpdateExpense = () => {
+    const id = item.id;
+    const expenseData  ={
+      description: description,
+      amount: expense,
+      date: selectedDate
+    }
+
+    axios.put(`http://localhost:3001/api/updatefinance/?id=${id}`, expenseData)
+      .then(res => {
+        console.log(res.data);
+        onEdit();
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Error occurred while updating the assignment")
+      });
+      onClose(false);
+  }
 
   //Date Picker functions
   const handleShowDatePicker = () => {
@@ -58,6 +82,8 @@ const EditExpensesPopUp = ({ onClose }) => {
           <p style={{fontSize:'18px', fontWeight: '520'}}>Expenses</p>
           <input
             type="text" name="" required className="inputField" style={{width: '390px', height: '35px', fontSize: '17px'}}
+            value={description}
+            onChange={e => setDescription(e.target.value)}
           />
         </div>
         <div style={{display: 'flex', gap: '20px', marginLeft: '34px'}}>
@@ -110,6 +136,8 @@ const EditExpensesPopUp = ({ onClose }) => {
             <p style={{fontSize:'18px', fontWeight: '520'}}>Expense</p>
             <input
                 type="text" name="" required className="inputField" style={{width: '80px', height: '35px', fontSize: '17px'}}
+                value={expense}
+                onChange={e => setExpense(e.target.value)}
             />
           </div>
         </div>
@@ -145,7 +173,7 @@ const EditExpensesPopUp = ({ onClose }) => {
               backgroundColor: 'white'
             }
           }}
-          onClick={handleCancel}
+          onClick={handleUpdateExpense}
         >Confirm</Button>
       </div>
     </div>

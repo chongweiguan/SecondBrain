@@ -1,7 +1,10 @@
 import React from 'react';
-import { moduleData } from '../../data/dummy';
 
-const ModuleProgress = () => {
+const ModuleProgress = ({moduleData}) => {
+  
+  if(!moduleData) {
+    return null;
+  }
   // Calculate the total completed MCs for each category
   const coreTotalMC = moduleData
     .filter((module) => module.type === 'Core')

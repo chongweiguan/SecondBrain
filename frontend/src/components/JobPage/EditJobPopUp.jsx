@@ -2,10 +2,37 @@ import {React, useState} from "react";
 import { Button } from "@mui/material";
 import Calendar from "../Others/Calendar";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import axios from "axios";
 
-const EditJobPopUp = ({ onClose }) => {
-  const [selectedDate, setSelectedDate] = useState("\u00A0");
+const EditJobPopUp = ({ onClose, item, onEdit }) => {
+  const [selectedDate, setSelectedDate] = useState(item.next_deadline);
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const [company, setCompany] = useState(item.company);
+  const [position, setPosition] = useState(item.position);
+  const [status, setStatus] = useState(item.status);
+  const [remarks, setRemarks] = useState(item.remarks);
+
+  const handleUpdateJob = () => {
+    const id = item.id;
+    const jobData = {
+      company: company,
+      position: position,
+      status: status,
+      next_deadline: selectedDate,
+      remarks: remarks
+    }
+    axios.put(`http://localhost:3001/api/updatejobs/?id=${id}`, jobData)
+      .then(res => {
+        console.log(res.data);
+        onEdit();
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Error occurred while updating the job")
+      });
+      onClose(false);
+  }
 
   //Date Picker functions
   const handleShowDatePicker = () => {
@@ -52,6 +79,8 @@ const EditJobPopUp = ({ onClose }) => {
           }}>
           <p style={{fontSize:'18px', fontWeight: '520'}}>Company</p>
           <input
+            value={company}
+            onChange={e => setCompany(e.target.value)}
             type="text" name="" required className="inputField" style={{width: '380px', height: '35px', fontSize: '17px'}}
           />
         </div>
@@ -64,6 +93,8 @@ const EditJobPopUp = ({ onClose }) => {
           }}>
           <p style={{fontSize:'18px', fontWeight: '520'}}>Position</p>
           <input
+            value={position}
+            onChange={e => setPosition(e.target.value)}
             type="text" name="" required className="inputField" style={{width: '380px', height: '35px', fontSize: '17px'}}
           />
         </div>
@@ -120,6 +151,8 @@ const EditJobPopUp = ({ onClose }) => {
             <p style={{fontSize:'18px', fontWeight: '520'}}>Status</p>
             <input
               type="text" name="" required className="inputField" style={{width: '440px', height: '35px', fontSize: '17px'}}
+              value={status}
+              onChange={e => setStatus(e.target.value)}
             />
             </div>
             <div 
@@ -133,6 +166,8 @@ const EditJobPopUp = ({ onClose }) => {
             <p style={{fontSize:'18px', fontWeight: '520'}}>Remarks</p>
             <input
               type="text" name="" required className="inputField" style={{width: '440px', height: '35px', fontSize: '17px'}}
+              value={remarks}
+              onChange={e => setRemarks(e.target.value)}
             />
             </div>
       </div>
@@ -167,7 +202,7 @@ const EditJobPopUp = ({ onClose }) => {
               backgroundColor: 'white'
             }
           }}
-          onClick={handleCancel}
+          onClick={handleUpdateJob}
         >Confirm</Button>
       </div>
     </div>

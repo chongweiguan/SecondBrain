@@ -1,9 +1,24 @@
 import {React, useState} from "react";
 import { Button } from "@mui/material";
+import axios from 'axios';
 
-const DeletePopUp = ({onClose}) => {
+const DeletePopUp = ({onClose, onDelete, item, type}) => {
 
   const handleCancel = () => {
+    onClose(false);
+  };
+
+  const handleDelete = () => {
+    const id = item.id;
+    axios.delete(`http://localhost:3001/api/delete${type}/?id=${id}`) // Pass the ID in the URL as a query parameter
+      .then(res => {
+        console.log(res.data);
+        onDelete();
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Error occurred while deleting the assignment");
+      });
     onClose(false);
   };
 
@@ -53,7 +68,7 @@ const DeletePopUp = ({onClose}) => {
                 backgroundColor: 'white'
             }
             }}
-            onClick={handleCancel}
+            onClick={handleDelete}
         >Confirm</Button>
         </div>
     </div>

@@ -4,9 +4,12 @@ import AccessTime from '@mui/icons-material/AccessTime';
 import { Button } from "@mui/material";
 import Calendar from "../Others/Calendar";
 import TimePicker from "../Others/TimePicker";
+import axios from 'axios';
 
 
-const AddTaskPopUp = ({ onClose }) => {
+const AddTaskPopUp = ({ user, onClose, onAdd}) => {
+
+  const [task, setTask] = useState('');
 
   const [selectedDate, setSelectedDate] = useState("\u00A0");
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -46,6 +49,27 @@ const AddTaskPopUp = ({ onClose }) => {
     onClose(false);
   };
 
+  const handleAddTask = () => {
+    const assignmentData = {
+      userid: user.id,
+      description: task,
+      date: selectedDate,
+      time: selectedTime,
+      complete: false,
+    }
+
+    axios.post(`http://localhost:3001/api/insertassignments/`, assignmentData)
+      .then(res => {
+        console.log(res.data);
+        onAdd();
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Error occurred while adding the assignment")
+      });
+      onClose(false);
+  }
+
   return (
     <div className='pop-up-container' style={{
       padding: '30px 30px',
@@ -75,6 +99,7 @@ const AddTaskPopUp = ({ onClose }) => {
           <p style={{fontSize:'18px', fontWeight: '520'}}>Task</p>
           <input
             type="text" name="" required className="inputField" style={{width: '435px', height: '35px', fontSize: '17px'}}
+            onChange={e => setTask(e.target.value)}
           />
         </div>
         <div style={{display: 'flex', gap: '20px'}}>
@@ -193,7 +218,7 @@ const AddTaskPopUp = ({ onClose }) => {
               backgroundColor: 'white'
             }
           }}
-          onClick={handleCancel}
+          onClick={handleAddTask}
         >Add</Button>
       </div>
     </div>

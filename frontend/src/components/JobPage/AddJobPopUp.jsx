@@ -2,8 +2,15 @@ import {React, useState} from "react";
 import { Button } from "@mui/material";
 import Calendar from "../Others/Calendar";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import axios from "axios";
 
-const AddJobPopUp = ({ onClose }) => {
+const AddJobPopUp = ({ onClose, user, onAdd }) => {
+
+  const [company, setCompany] = useState('');
+  const [position, setPosition] = useState('');
+  const [status, setStatus] = useState('');
+  const [remarks, setRemarks] = useState('');
+
   const [selectedDate, setSelectedDate] = useState("\u00A0");
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -24,6 +31,28 @@ const AddJobPopUp = ({ onClose }) => {
   const handleCancel = () => {
     onClose(false);
   };
+
+  const handleAddJob = () => {
+    const jobData = {
+      userid: user.id,
+      company: company,
+      position: position,
+      status: status,
+      next_deadline: selectedDate,
+      remarks: remarks
+    }
+
+    axios.post(`http://localhost:3001/api/insertjobs/`, jobData)
+      .then(res => {
+        console.log(res.data);
+        onAdd();
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Error occurred while adding the assignment")
+      });
+      onClose(false);
+  }
 
   return (
     <div className='pop-up-container' style={{
@@ -53,6 +82,7 @@ const AddJobPopUp = ({ onClose }) => {
           <p style={{fontSize:'18px', fontWeight: '520'}}>Company</p>
           <input
             type="text" name="" required className="inputField" style={{width: '380px', height: '35px', fontSize: '17px'}}
+            onChange={e => setCompany(e.target.value)}
           />
         </div>
         <div 
@@ -65,6 +95,7 @@ const AddJobPopUp = ({ onClose }) => {
           <p style={{fontSize:'18px', fontWeight: '520'}}>Position</p>
           <input
             type="text" name="" required className="inputField" style={{width: '380px', height: '35px', fontSize: '17px'}}
+            onChange={e => setPosition(e.target.value)}
           />
         </div>
         <div style={{display: 'flex', gap: '20px', padding: '20px 0px 20px 0px'}}>
@@ -120,6 +151,7 @@ const AddJobPopUp = ({ onClose }) => {
             <p style={{fontSize:'18px', fontWeight: '520'}}>Status</p>
             <input
               type="text" name="" required className="inputField" style={{width: '440px', height: '35px', fontSize: '17px'}}
+              onChange={e => setStatus(e.target.value)}
             />
             </div>
             <div 
@@ -133,6 +165,7 @@ const AddJobPopUp = ({ onClose }) => {
             <p style={{fontSize:'18px', fontWeight: '520'}}>Remarks</p>
             <input
               type="text" name="" required className="inputField" style={{width: '440px', height: '35px', fontSize: '17px'}}
+              onChange={e => setRemarks(e.target.value)}
             />
             </div>
       </div>
@@ -167,7 +200,7 @@ const AddJobPopUp = ({ onClose }) => {
               backgroundColor: 'white'
             }
           }}
-          onClick={handleCancel}
+          onClick={handleAddJob}
         >Add</Button>
       </div>
     </div>
