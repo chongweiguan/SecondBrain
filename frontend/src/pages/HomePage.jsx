@@ -23,11 +23,13 @@ const HomePage = () => {
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api')
+    axios.get('http://localhost:3001/api/login')
       .then(res => {
         console.log(res);
         if(res.data.Status === "Success") {
           setAuth(true);
+          console.log("this is the user")
+          console.log(res.data);
           setId(res.data.id);
         } else {
           setAuth(false);

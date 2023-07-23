@@ -5,6 +5,8 @@ import mysql from 'mysql';
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
+import session from 'express-session';
 
 dotenv.config();
 
@@ -20,12 +22,25 @@ const db = mysql.createConnection({
 });
 
 app.use(express.json());
-app.use(cookieParser());
 app.use(cors({
   origin: ['http://localhost:5173'],
   methods: ['POST', 'GET'],
   credentials: true
 }));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(
+  session({
+    key: 'id',
+    secret:  process.env.JWTKEY,
+    resave: 'false',
+    saveUninitialized:false,
+    cookie: {
+      expires: 60 * 60 * 24,
+    }
+  })
+);
 
 app.listen(3001, () => {
   console.log("backend is running on port 3001");
@@ -36,6 +51,7 @@ app.get("/", (req, res) => {
 });
 
 /* REGISTRATION AND LOGIN*/ 
+
 app.post('/api/register', (req, res) => {
   const sql = "INSERT INTO user (`firstname`, `lastname`, `leetcode`, `email`, `password`) VALUES (?)";
   bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
@@ -95,7 +111,7 @@ const verifyUser = (req, res, next) => {
   }
 }
 
-app.get('/api', verifyUser, (req, res) => {
+app.get('/api/login', verifyUser, (req, res) => {
   return res.json({Status: "Success", id: req.id});
 })
 
