@@ -118,21 +118,6 @@ const LoginPage = () => {
       <p>or</p>
       <hr style={{width: '200px', marginTop: '2px', border: '1px solid #5C5C5C'}}/>
       </div>
-      <div style={{padding: '60px 0px 0px 0px'}}>
-      <Button
-        sx={{
-        fontWeight: '600',
-        backgroundColor: 'white',
-        width: '220px',
-        fontSize: '15px',
-        color: 'black', 
-        border: '1px solid #5A5A5A', 
-        borderRadius: '7px', 
-        padding: '5px 8px', 
-        textTransform: 'none',
-        }}
-      ><img style={{height: '25px'}}src={google}/>{"\u00A0\u00A0Sign In with Google"}</Button>
-      </div>
       <div style={{padding: '40px 0px 0px 0px', display: 'flex'}}>
       <p style={{fontSize: '12px'}}>{"Dont have an Account?\u00A0"}</p>
       <Link to='/register'>
