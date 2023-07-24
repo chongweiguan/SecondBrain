@@ -30,7 +30,11 @@ db.connect((err) => {
 });
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: ['https://second-brain-blue.vercel.app'],
+  methods: ['POST', 'GET', 'DELETE', 'PUT'],
+  credentials: true
+}));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 
