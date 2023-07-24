@@ -31,7 +31,7 @@ db.connect((err) => {
 
 app.use(express.json());
 app.use(cors({
-  origin: ['https://second-brain-blue.vercel.app/'],
+  origin: ['*'],
   methods: ['POST', 'GET', 'DELETE', 'PUT'],
   credentials: true
 }));
