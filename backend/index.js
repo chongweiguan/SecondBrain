@@ -21,6 +21,14 @@ const db = mysql.createConnection({
   database: process.env.DB
 });
 
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err.message);
+    return;
+  }
+  console.log('Connected to the database successfully!');
+});
+
 app.use(express.json());
 app.use(cors({
   origin: ['http://localhost:5173'],

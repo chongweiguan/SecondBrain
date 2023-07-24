@@ -22,7 +22,7 @@ const HomePage = () => {
   axios.defaults.withCredentials = true;
 
   const auth = () => {
-    axios.get('http://localhost:3001/api/login')
+    axios.get(`http://localhost:3001/api/login`)
       .then(res => {
         if(res.data.loggedIn) {
           setUser(res.data.user);
