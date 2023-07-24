@@ -108,9 +108,9 @@ const HomePage = () => {
         gap: '20px',
         flexDirection: isSmallScreen ? 'column' : 'row'
       }}>
-        <FinanceBox />
-        <AcademicBox />
-        <JobBox />
+        <FinanceBox user={user}/>
+        <AcademicBox user={user}/>
+        <JobBox user={user}/>
       </div>
       <hr className="line-break"/>
     </div>

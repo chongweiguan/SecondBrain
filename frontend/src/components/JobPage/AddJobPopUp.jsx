@@ -127,7 +127,7 @@ const AddJobPopUp = ({ onClose, user, onAdd }) => {
               <CalendarMonthIcon sx={{fontSize:'17px'}}/>
             </Button>
             {showDatePicker && (
-              <div className='pop-up-overlay' onClick={handleCloseDatePicker}>
+              <div className='pop-up-overlay'>
                 <div
                 style={{
                   position: "absolute",

@@ -9,6 +9,8 @@ import FinanceBox from '../components/FinancePage/FinanceBox';
 import NavBar from '../components/Others/NavBar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import dayjs from 'dayjs';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 Chart.register(ArcElement);
 
@@ -76,9 +78,12 @@ const DonutChart = ({ percentage }) => {
 
 const FinancePage = () => {
 
-  const[financeData, setFinanceData] = useState(null);
-
+  const [financeData, setFinanceData] = useState(null);
+  const [filteredFinanceData, setFilteredFinanceData] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [formattedPeriod, setFormattedPeriod] = useState('');
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
@@ -87,7 +92,6 @@ const FinancePage = () => {
     try {
       axios.get(`http://localhost:3001/api/getfinance/${user.id}`)
         .then(res => {
-          console.log(user.id)
           setFinanceData(res.data);
         })
     } catch (err) {
@@ -112,6 +116,8 @@ const FinancePage = () => {
 
   useEffect(() => {
     auth();
+    const currentMonth = dayjs().month()+1;
+    setSelectedMonth(currentMonth);
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 1350);
     };
@@ -128,6 +134,17 @@ const FinancePage = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    // Check if financeData and selectedMonth are available before filtering
+    if (financeData && selectedMonth) {
+      const currentMonthData = filterDataByMonth(selectedMonth);
+      setFilteredFinanceData(currentMonthData);
+      const startOfMonth = dayjs().month(selectedMonth - 1).startOf('month').format('D MMM YYYY');
+      const endOfMonth = dayjs().month(selectedMonth - 1).endOf('month').format('D MMM YYYY');
+      setFormattedPeriod(`${startOfMonth} - ${endOfMonth}`);
+    }
+  }, [financeData, selectedMonth]);
+
   const handleLogout = () => {
     axios.get('http://localhost:3001/api/logout')
     .then(res => {
@@ -139,14 +156,57 @@ const FinancePage = () => {
     return null;
   }
 
+  const handleSelectMonth = (idx) => {
+    setSelectedMonth(idx)
+  }
+
+  const filterDataByMonth = (month) => {
+    if (!financeData) return null;
+
+    const filteredData = financeData.filter((item) => {
+      // Assuming the date field is stored as 'date' in the financeData
+      const dateString = item.date;
+      const dateObject = new Date(dateString);
+      const itemMonth = dateObject.getMonth() + 1; // JavaScript months are 0-indexed (0 to 11)
+      return itemMonth === month;
+    });
+
+    return filteredData;
+  };
+
   // Calculate the total spent for the current month
-  const totalSpent = 100;
+  const totalSpent = filteredFinanceData
+    ? filteredFinanceData.reduce((sum, item) => item.amount < 0 ? sum - parseInt(item.amount) : sum - 0, 0)
+    : 0;
 
   // Define the total budget
   const totalBudget = 800;
 
   // Calculate the percentage spent
   const percentageSpent = ((totalSpent / totalBudget) * 100).toFixed(2);
+
+  const splitByWeeks = () => {
+    if (!filteredFinanceData) return {};
+
+    const weeksData = {
+      week1: 0,
+      week2: 0,
+      week3: 0,
+      week4: 0,
+    };
+
+    filteredFinanceData.forEach((item) => {
+      const dateObject = dayjs(item.date);
+      const weekNumber = dateObject.$W;
+      weekNumber < 5 && item.amount < 0 ? weeksData[`week${weekNumber}`] -= parseInt(item.amount) : null;
+    });
+
+    return weeksData;
+  };
+
+  // Get the amounts spent in each week
+  const amountsByWeeks = splitByWeeks();
+  console.log(amountsByWeeks)
 
   const months = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -168,7 +228,7 @@ const FinancePage = () => {
       </div>
         <hr className="line-break" />
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px'}}>
-          <p style={{fontSize: '20px'}}>Period: 1 July 2023 - 31 July 2023</p>
+          <p style={{fontSize: '20px'}}>Period: {formattedPeriod}</p>
         </div>
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
           <div >
@@ -179,34 +239,32 @@ const FinancePage = () => {
             <p style={{fontSize: '20px', fontWeight:'500'}}>out of $800</p>
           </div>
           <div style={{height: '300px', width: '600px', display: 'flex', flexDirection: 'column', gap: '20px', justifyContent: 'center', padding: '40px 60px'}}>
-            <div style={{display: 'flex', gap: '20px'}}>
-              <p style={{fontWeight: '500'}}>Week 1</p>
-              <div className='progress-bar' style={{width: '300px', height: '25px', backgroundColor: 'white', borderRadius: '10px'}}/>
-              <p style={{fontWeight: '500'}}>$250.16</p>
-            </div>
-            <div style={{display: 'flex', gap: '20px'}}>
-              <p style={{fontWeight: '500'}}>Week 2</p>
-              <div className='progress-bar' style={{width: '250px', height: '25px', backgroundColor: 'white', borderRadius: '10px'}}/>
-              <p style={{fontWeight: '500'}}>$150.16</p>
-            </div>
-            <div style={{display: 'flex', gap: '20px'}}>
-              <p style={{fontWeight: '500'}}>Week 3</p>
-              <div className='progress-bar' style={{width: '250px', height: '25px', backgroundColor: 'white', borderRadius: '10px'}}/>
-              <p style={{fontWeight: '500'}}>$150.16</p>
-            </div>
-            <div style={{display: 'flex', gap: '20px'}}>
-              <p style={{fontWeight: '500'}}>Week 4</p>
-              <div className='progress-bar' style={{width: '280px', height: '25px', backgroundColor: 'white', borderRadius: '10px'}}/>
-              <p style={{fontWeight: '500'}}>$180.16</p>
-            </div>
+          {amountsByWeeks &&
+            Object.entries(amountsByWeeks).map(([week, amount]) => (
+              <div key={week} style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+                <p style={{ fontWeight: '500' }}>Week {week.slice(4)}</p>
+                <div style={{width: '300px'}}>
+                  <div
+                    className='progress-bar'
+                    style={{
+                      width: `${(amount / totalBudget) * 300}px`,
+                      height: '25px',
+                      backgroundColor: 'white',
+                      borderRadius: '10px',
+                    }}
+                  />
+                </div>
+                <p style={{ fontWeight: '500' }}>SGD {amount}</p>
+              </div>
+            ))}
           </div>
         </div>
-        <hr className="line-break" />
-        <div style={{display: 'flex', justifyContent: 'center'}}>
-          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '50px', flexWrap: 'wrap', width: '1100px'}}>
-            {months && months.map((month, idx) => (
+        <div style={{display: 'flex', justifyContent: 'center', padding: '30px'}}>
+          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', flexWrap: 'wrap', width: '900px'}}>
+          {months && months.map((month, idx) => (
               <div>
                 <Button
+                onClick={() => handleSelectMonth(idx+1)}
                 sx={{
                   width: '120px',
                   fontSize: '17px',
@@ -224,6 +282,7 @@ const FinancePage = () => {
              ))}
           </div>
         </div>
+        <hr className="line-break" />
         <div style={{padding: '50px', display: 'flex', justifyContent: 'center'}}>
           <FinanceBox user={user} financeData={financeData} getData={getFinanceData}/>
         </div>

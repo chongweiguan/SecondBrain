@@ -1,8 +1,43 @@
-import React from "react"
+import { React, useEffect, useState } from 'react';
 import { Link } from "react-router-dom"
-import { examsData, assignmentData } from "../../data/dummy"
+import axios from 'axios';
 
-const AcademicBox = () => {
+const AcademicBox = ({ user }) => {
+
+  const [assignmentData, setAssignmentData] = useState(null);
+  const [examsData, setExamData] = useState(null);
+
+  const getAssignmentData = async () => {
+    try {
+      axios.get(`http://localhost:3001/api/getassignments/${user.id}`)
+        .then(res => {
+          setAssignmentData(res.data);
+        })
+    } catch (err) {
+      console.error(err);
+      alert("Error occurred fetching assignment Data")
+    }
+  }
+
+  const getExamData = async () => {
+    try {
+      axios.get(`http://localhost:3001/api/getexams/${user.id}`)
+        .then(res => {
+          setExamData(res.data);
+        })
+    } catch (err) {
+      console.error(err);
+      alert("Error occurred fetching exam data")
+    }
+  }
+
+  useEffect(() => {
+    if (user && user.id) {
+      getAssignmentData();
+      getExamData();
+    }
+  }, [user]);
+
     return (
       <div className="home-page-box-container">
         <header className="home-page-box-header">
@@ -15,15 +50,13 @@ const AcademicBox = () => {
           width: '405px'
         }}>
           <div className='scroll-container-element-container'>
-            <div className="scroll-container-element" style={{width: '180px', color: '#a3a3a3'}}>Task</div>
-            <div className="scroll-container-element" style={{width: '250px', color: '#a3a3a3'}}>Deadline</div>
-            <div className="scroll-container-element" style={{width: '100px', color: '#a3a3a3'}}>Complete</div>
+            <div className="scroll-container-element" style={{width: '200px', color: '#a3a3a3'}}>Task</div>
+            <div className="scroll-container-element" style={{width: '200px', color: '#a3a3a3'}}>Deadline</div>
           </div>
           {assignmentData && assignmentData.map(item => (
             <div key={item.id} className="scroll-container-element-container">
-              <div className="scroll-container-element" style={{width: '180px'}}>{item.description}</div>
-              <div className="scroll-container-element" style={{width: '250px'}}>{item.dateTime}</div>
-              <div className="scroll-container-element" style={{width: '100px', justifyContent: 'center'}}>{item.complete}</div>
+              <div className="scroll-container-element" style={{width: '200px'}}>{item.description}</div>
+              <div className="scroll-container-element" style={{width: '200px'}}>{item.date} {item.time}</div>
             </div>
           ))}
         </div>
@@ -40,7 +73,7 @@ const AcademicBox = () => {
           {examsData && examsData.map(item => (
             <div key={item.id} className="scroll-container-element-container">
               <div className="scroll-container-element" style={{width: '180px'}}>{item.description}</div>
-              <div className="scroll-container-element" style={{width: '250px'}}>{item.dateTime}</div>
+              <div className="scroll-container-element" style={{width: '250px'}}>{item.date} {item.time}</div>
               <div className="scroll-container-element" style={{width: '100px'}}>{item.venue}</div>
             </div>
           ))}
