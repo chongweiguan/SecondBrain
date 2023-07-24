@@ -42,7 +42,7 @@ app.use(
   session({
     key: 'id',
     secret:  process.env.JWTKEY,
-    resave: 'false',
+    resave: false,
     saveUninitialized:false,
   })
 );
@@ -86,6 +86,7 @@ app.post('/api/login', (req, res) => {
       bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
         if(err) return res.json({Error: "Password does not match"});
         if(response) {
+          console.log(response);
           req.session.user = data[0];
           res.send(data[0]);
         } else {
