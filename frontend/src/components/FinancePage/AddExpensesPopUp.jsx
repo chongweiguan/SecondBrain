@@ -4,9 +4,13 @@ import AccessTime from '@mui/icons-material/AccessTime';
 import { Button } from "@mui/material";
 import Calendar from "../Others/Calendar";
 import TimePicker from "../Others/TimePicker";
+import axios from "axios";
 
 
-const AddExpensesPopUp = ({ onClose }) => {
+const AddExpensesPopUp = ({ onClose, user, onAdd }) => {
+
+  const [description, setDescription] = useState('');
+  const [expense, setExpense] = useState('');
 
   const [selectedDate, setSelectedDate] = useState("\u00A0");
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -28,6 +32,26 @@ const AddExpensesPopUp = ({ onClose }) => {
   const handleCancel = () => {
     onClose(false);
   };
+
+  const handleAddExpense = () => {
+    const financeData = {
+      userid: user.id,
+      description: description,
+      amount: expense,
+      date: selectedDate,
+    }
+
+    axios.post(`http://localhost:3001/api/insertfinance/`, financeData)
+      .then(res => {
+        console.log(res.data);
+        onAdd();
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Error occurred while adding the assignment")
+      });
+      onClose(false);
+  }
 
   return (
     <div className='pop-up-container' style={{
@@ -55,9 +79,10 @@ const AddExpensesPopUp = ({ onClose }) => {
             alignItems: 'center', 
             padding: '30px 0px 30px 0px'
           }}>
-          <p style={{fontSize:'18px', fontWeight: '520'}}>Expenses</p>
+          <p style={{fontSize:'18px', fontWeight: '520'}}>Expense</p>
           <input
-            type="text" name="" required className="inputField" style={{width: '390px', height: '35px', fontSize: '17px'}}
+            type="text" name="" required className="inputField" style={{width: '385px', height: '35px', fontSize: '17px'}}
+            onChange={e => setDescription(e.target.value)}
           />
         </div>
         <div style={{display: 'flex', gap: '20px', marginLeft: '34px'}}>
@@ -88,7 +113,7 @@ const AddExpensesPopUp = ({ onClose }) => {
               <CalendarMonthIcon sx={{fontSize:'17px'}}/>
             </Button>
             {showDatePicker && (
-              <div className='pop-up-overlay' onClick={handleCloseDatePicker}>
+              <div className='pop-up-overlay'>
                 <div
                 style={{
                   position: "absolute",
@@ -107,9 +132,10 @@ const AddExpensesPopUp = ({ onClose }) => {
               gap: '15px', 
               alignItems: 'center', 
             }}>
-            <p style={{fontSize:'18px', fontWeight: '520'}}>Expense</p>
+            <p style={{fontSize:'18px', fontWeight: '520'}}>Amount</p>
             <input
                 type="text" name="" required className="inputField" style={{width: '80px', height: '35px', fontSize: '17px'}}
+                onChange={e => setExpense(e.target.value)}
             />
           </div>
         </div>
@@ -145,7 +171,7 @@ const AddExpensesPopUp = ({ onClose }) => {
               backgroundColor: 'white'
             }
           }}
-          onClick={handleCancel}
+          onClick={handleAddExpense}
         >Add</Button>
       </div>
     </div>

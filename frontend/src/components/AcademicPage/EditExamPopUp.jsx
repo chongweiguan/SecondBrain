@@ -4,15 +4,39 @@ import { Button } from "@mui/material";
 import TimePicker from "../Others/TimePicker";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Calendar from "../Others/Calendar";
+import axios from "axios";
 
+const EditExamPopUp = ({ onClose, item, onEdit }) => {
 
-const EditExamPopUp = ({ onClose }) => {
+  const [exam, setExam] = useState(item.description);
+  const [venue, setVenue] = useState(item.venue);
 
-  const [selectedTime, setSelectedTime] = useState("\u00A0");
+  const [selectedTime, setSelectedTime] = useState(item.time);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
-  const [selectedDate, setSelectedDate] = useState("\u00A0");
+  const [selectedDate, setSelectedDate] = useState(item.date);
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const handleUpdateExam = () => {
+    const id = item.id;
+    const examData = {
+      description: exam,
+      date: selectedDate,
+      time: selectedTime,
+      venue: venue
+    }
+
+    axios.put(`http://localhost:3001/api/updateexams/?id=${id}`, examData)
+      .then(res => {
+        console.log(res.data);
+        onEdit();
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Error occurred while updating the exam")
+      });
+      onClose(false);
+  }
 
   //Date Picker functions
   const handleShowDatePicker = () => {
@@ -74,7 +98,9 @@ const EditExamPopUp = ({ onClose }) => {
           }}>
           <p style={{fontSize:'18px', fontWeight: '520'}}>{'Exam\u00A0'}</p>
           <input
+            value={exam}
             type="text" name="" required className="inputField" style={{width: '420px', height: '35px', fontSize: '17px'}}
+            onChange={e => setExam(e.target.value)}
           />
         </div>
         <div style={{display: 'flex', gap: '20px', padding: '0px 0px 25px 0px'}}>
@@ -105,7 +131,7 @@ const EditExamPopUp = ({ onClose }) => {
               <CalendarMonthIcon sx={{fontSize:'17px'}}/>
             </Button>
             {showDatePicker && (
-              <div className='pop-up-overlay' onClick={handleCloseDatePicker}>
+              <div className='pop-up-overlay'>
                 <div
                 style={{
                   position: "absolute",
@@ -169,9 +195,11 @@ const EditExamPopUp = ({ onClose }) => {
               alignItems: 'center',
               width: '490px' 
             }}>
-            <p style={{fontSize:'18px', fontWeight: '520', fontSize: '17px'}}>Venue</p>
+            <p style={{fontSize:'18px', fontWeight: '520'}}>Venue</p>
             <input
-            type="text" name="" required className="inputField" style={{width: '250px', height: '35px', borderRadius: '5px'}}
+            value={venue}
+            type="text" name="" required className="inputField" style={{width: '250px', height: '35px', borderRadius: '5px', fontSize: '17px'}}
+            onChange={e => setVenue(e.target.value)}
           />
           </div>
         </div>
@@ -207,7 +235,7 @@ const EditExamPopUp = ({ onClose }) => {
               backgroundColor: 'white'
             }
           }}
-          onClick={handleCancel}
+          onClick={handleUpdateExam}
         >Confirm</Button>
       </div>
     </div>

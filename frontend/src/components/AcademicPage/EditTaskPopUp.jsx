@@ -4,18 +4,38 @@ import AccessTime from '@mui/icons-material/AccessTime';
 import { Button } from "@mui/material";
 import Calendar from "../Others/Calendar";
 import TimePicker from "../Others/TimePicker";
+import axios from 'axios';
 
+const EditTaskPopUp = ({ onClose, item, onEdit }) => {
 
-const EditTaskPopUp = ({ onClose, task, date, time }) => {
-
-  const [selectedDate, setSelectedDate] = useState(date);
+  const [selectedDate, setSelectedDate] = useState(item.date);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const [selectedTime, setSelectedTime] = useState(time);
+  const [selectedTime, setSelectedTime] = useState(item.time);
 
-  const [selectedTask, setTask] = useState(task);
+  const [selectedTask, setTask] = useState(item.description);
 
   const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const handleUpdateTask = () => {
+    const id = item.id;
+    const assignmentData = {
+      description: selectedTask,
+      date: selectedDate,
+      time: selectedTime,
+    }
+
+    axios.put(`http://localhost:3001/api/updateassignments/?id=${id}`, assignmentData)
+      .then(res => {
+        console.log(res.data);
+        onEdit();
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Error occurred while updating the assignment")
+      });
+      onClose(false);
+  }
 
   //Date Picker functions
   const handleShowDatePicker = () => {
@@ -77,7 +97,9 @@ const EditTaskPopUp = ({ onClose, task, date, time }) => {
           }}>
           <p style={{fontSize:'18px', fontWeight: '520'}}>Task</p>
           <input
+            value={selectedTask}
             type="text" name="" required className="inputField" style={{width: '435px', height: '35px', fontSize: '17px'}}
+            onChange={e => setTask(e.target.value)}
           />
         </div>
         <div style={{display: 'flex', gap: '20px'}}>
@@ -108,7 +130,7 @@ const EditTaskPopUp = ({ onClose, task, date, time }) => {
               <CalendarMonthIcon sx={{fontSize:'17px'}}/>
             </Button>
             {showDatePicker && (
-              <div className='pop-up-overlay' onClick={handleCloseDatePicker}>
+              <div className='pop-up-overlay'>
                 <div
                 style={{
                   position: "absolute",
@@ -196,7 +218,7 @@ const EditTaskPopUp = ({ onClose, task, date, time }) => {
               backgroundColor: 'white'
             }
           }}
-          onClick={handleCancel}
+          onClick={handleUpdateTask}
         >Confirm</Button>
       </div>
     </div>

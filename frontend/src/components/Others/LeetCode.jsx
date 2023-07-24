@@ -1,6 +1,6 @@
 import {React, useState, useEffect}from "react";
 
-const LeetCode = () => {
+const LeetCode = ({leetcode}) => {
     
   const [leetcodeData, setLeetcodeData] = useState(null);
 
@@ -11,10 +11,9 @@ const LeetCode = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://leetcode-stats-api.herokuapp.com/weiguanchong123');
+        const response = await fetch(`https://leetcode-stats-api.herokuapp.com/${leetcode}`);
         const data = await response.json();
         setLeetcodeData(data);
-        console.log(leetcodeData);
       } catch (error) {
         console.error(error);
       }

@@ -24,7 +24,7 @@ const db = mysql.createConnection({
 app.use(express.json());
 app.use(cors({
   origin: ['http://localhost:5173'],
-  methods: ['POST', 'GET'],
+  methods: ['POST', 'GET', 'DELETE', 'PUT'],
   credentials: true
 }));
 app.use(cookieParser());
@@ -36,9 +36,6 @@ app.use(
     secret:  process.env.JWTKEY,
     resave: 'false',
     saveUninitialized:false,
-    cookie: {
-      expires: 60 * 60 * 24,
-    }
   })
 );
 
@@ -81,10 +78,8 @@ app.post('/api/login', (req, res) => {
       bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
         if(err) return res.json({Error: "Password does not match"});
         if(response) {
-          const id = data[0].id;
-          const token = jwt.sign({id}, process.env.JWTKEY, {expiresIn: '1d'});
-          res.cookie('token', token);
-          return res.json({Status: "Success"});
+          req.session.user = data[0];
+          res.send(data[0]);
         } else {
           return res.json({Error: "Password does not match"});
         }
@@ -95,35 +90,24 @@ app.post('/api/login', (req, res) => {
   })
 });
 
-const verifyUser = (req, res, next) => {
-  const token = req.cookies.token;
-  if(!token) {
-    return res.json({Error: 'You are not authenticated'});
+app.get('/api/login', (req, res) => {
+  if (req.session.user) {
+    res.send({ loggedIn: true, user: req.session.user });
   } else {
-    jwt.verify(token, process.env.JWTKEY, (err, decoded) => {
-      if(err) {
-        return res.json({Error: "Token is not valid"});
-      } else {
-        req.id = decoded.id;
-        next();
-      }
-    })
+    res.send({ loggedIn: false });
   }
-}
-
-app.get('/api/login', verifyUser, (req, res) => {
-  return res.json({Status: "Success", id: req.id});
 })
 
 app.get('/api/logout', (req, res) => {
-  res.clearCookie('token');
+  res.clearCookie('id');
   return res.json({Status: "Success"});
 })
 
 /* FINANCE */
-app.get("/api/getfinance", (req, res) => {
-  const sqlSelect = "SELECT * FROM finance";
-  db.query(sqlSelect, (err, result) => {
+app.get("/api/getfinance/:id", (req, res) => {
+  const userid = req.params.id;
+  const sqlSelect = "SELECT * FROM finance WHERE userid = ?";
+  db.query(sqlSelect, [userid], (err, result) => {
   if (err) {
     console.log(err);
     res.status(500).send("Error occurred while fetching finance record.");
@@ -135,13 +119,13 @@ app.get("/api/getfinance", (req, res) => {
 })
 
 app.post("/api/insertfinance", (req, res) => {
+  const userid = req.body.userid;
   const description = req.body.description;
-  const category = req.body.category;
   const amount = req.body.amount;
-  const datetime = req.body.dateTime;
+  const date = req.body.date;
 
-  const sqlInsert = "INSERT INTO finance (description, category, amount, datetime) VALUES (?,?,?,?)";
-  db.query(sqlInsert, [description, category, amount, datetime], (err, result) => {
+  const sqlInsert = "INSERT INTO finance (userid, description, amount, date) VALUES (?,?,?,?)";
+  db.query(sqlInsert, [userid, description, amount, date], (err, result) => {
   if (err) {
     console.log(err);
     res.status(500).send("Error occurred while inserting finance record.");
@@ -151,11 +135,11 @@ app.post("/api/insertfinance", (req, res) => {
   });
 });
 
-app.delete("/api/deletefinance/:id", (req, res) => {
-  const id = req.params.id;
+app.delete("/api/deletefinance/", (req, res) => {
+  const id = req.query.id;
   const sqlDelete = "DELETE FROM finance WHERE id = ?";
 
-  db.query(sqlDelete, id, (err, result) => {
+  db.query(sqlDelete, [id], (err, result) => {
   if (err) {
     console.log(err);
     res.status(500).send("Error occurred while deleting finance record.");
@@ -165,15 +149,14 @@ app.delete("/api/deletefinance/:id", (req, res) => {
   });
 });
 
-app.put("/api/updatefinance/:id", (req, res) => {
-  const id = req.params.id;
+app.put("/api/updatefinance/", (req, res) => {
+  const id = req.query.id;
   const description = req.body.description;
-  const category = req.body.category;
   const amount = req.body.amount;
-  const datetime = req.body.dateTime;
-  const sqlUpdate = "UPDATE finance SET description =?, category =?, amount =?, datetime =? WHERE id = ?";
+  const date = req.body.date;
+  const sqlUpdate = "UPDATE finance SET description =?, amount =?, date =? WHERE id = ?";
 
-  db.query(sqlUpdate, [description, category, amount, datetime, id], (err, result) => {
+  db.query(sqlUpdate, [description, amount, date, id], (err, result) => {
   if (err) {
     console.log(err);
   res.status(500).send("Error occurred while updating finance record.");
@@ -184,26 +167,28 @@ app.put("/api/updatefinance/:id", (req, res) => {
 })
 
 /* ASSIGNMENTS */
-app.get("/api/getassignments", (req, res) => {
-  const sqlSelect = "SELECT * FROM assignments";
-  db.query(sqlSelect, (err, result) => {
+app.get("/api/getassignments/:id", (req, res) => {
+  const userid = req.params.id;
+  const sqlSelect = "SELECT * FROM assignments WHERE userid = ?";
+  db.query(sqlSelect, [userid], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error occurred while fetching assignments record.");
     } else {
-        console.log("Successfully fetched assignment record.");
       res.status(200).send(result);
     }
   });
 })
 
-app.post("/api/insertassignments", (req, res) => {
+app.post("/api/insertassignments/", (req, res) => {
+  const userid = req.body.userid;
   const description = req.body.description;
-  const datetime = req.body.dateTime;
+  const date = req.body.date;
+  const time = req.body.time;
   const complete = req.body.complete;
   
-  const sqlInsert = "INSERT INTO assignments (description, datetime, complete) VALUES (?,?,?)"
-  db.query(sqlInsert, [description, datetime, complete], (err, result) => {
+  const sqlInsert = "INSERT INTO assignments (userid, description, date, time, complete) VALUES (?,?,?,?,?)"
+  db.query(sqlInsert, [userid, description, date, time, complete], (err, result) => {
     if (err) {
         console.log(err);
         res.status(500).send("Error occurred while inserting assignment record.");
@@ -213,28 +198,41 @@ app.post("/api/insertassignments", (req, res) => {
   })
 });
 
-app.delete("/api/deleteassignments/:id", (req, res) => {
-  const id = req.params.id;
+app.delete("/api/deleteassignments/", (req, res) => {
+  const id = req.query.id; // Use req.query.id to get the ID from the request URL
   const sqlDelete = "DELETE FROM assignments WHERE id = ?";
   
-  db.query(sqlDelete, id, (err, result) => {
+  db.query(sqlDelete, [id], (err, result) => {
     if (err) {
-        console.log(err);
-        res.status(500).send("Error occurred while deleting assignment record.");
+      console.log(err);
+      res.status(500).send("Error occurred while deleting assignment record.");
     } else {
-        res.status(200).send("assignment record deleted successfully.");
+      res.status(200).send("assignment record deleted successfully.");
     }
   });
 });
+
+app.put("/api/completeassignments/", (req, res) => {
+  const id = req.query.id ;
+  const sqlComplete = "UPDATE assignments SET complete = NOT complete WHERE id = ?"
+  db.query(sqlComplete, [id], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error occurred while updating assignment completion status.");
+    } else {
+      res.status(200).send("Assignment completion status updated successfully.");
+    }
+  });
+})
   
-app.put("/api/updateassignments/:id", (req, res) => {
-  const id = req.params.id;
+app.put("/api/updateassignments/", (req, res) => {
+  const id = req.query.id;
   const description = req.body.description;
-  const datetime = req.body.dateTime;
-  const complete = req.body.complete;
-  const sqlUpdate = "UPDATE assignments SET description =?, datetime =?, complete=? WHERE id = ?";
+  const date = req.body.date;
+  const time = req.body.time;
+  const sqlUpdate = "UPDATE assignments SET description =?, date =?, time=? WHERE id = ?";
   
-  db.query(sqlUpdate, [description, datetime, complete, id], (err, result) => {
+  db.query(sqlUpdate, [description, date, time, id], (err, result) => {
     if (err) {
         console.log(err);
         res.status(500).send("Error occurred while updating assignment record.");
@@ -245,9 +243,10 @@ app.put("/api/updateassignments/:id", (req, res) => {
 });
 
 /* EXAMS */
-app.get("/api/getexams", (req, res) => {
-    const sqlSelect = "SELECT * FROM exams";
-    db.query(sqlSelect, (err, result) => {
+app.get("/api/getexams/:id", (req, res) => {
+  const userid = req.params.id;
+    const sqlSelect = "SELECT * FROM exams WHERE userid = ?";
+    db.query(sqlSelect, [userid], (err, result) => {
       if (err) {
         console.log(err);
         res.status(500).send("Error occurred while fetching exams record.");
@@ -259,89 +258,94 @@ app.get("/api/getexams", (req, res) => {
   })
   
 app.post("/api/insertexams", (req, res) => {
-    const description = req.body.description;
-    const datetime = req.body.dateTime;
-    const complete = req.body.complete;
+  const userid = req.body.userid;
+  const description = req.body.description;
+  const date = req.body.date;
+  const time = req.body.time;
+  const venue = req.body.venue;
     
-    const sqlInsert = "INSERT INTO exams (description, datetime, complete) VALUES (?,?,?)"
-    db.query(sqlInsert, [description, datetime, complete], (err, result) => {
-      if (err) {
-          console.log(err);
-          res.status(500).send("Error occurred while inserting exam record.");
-      } else {
-          res.status(200).send("exam record inserted successfully.");
-      }
-    })
+  const sqlInsert = "INSERT INTO exams (userid, description, date, time, venue) VALUES (?,?,?,?,?)"
+  db.query(sqlInsert, [userid, description, date, time, venue], (err, result) => {
+    if (err) {
+        console.log(err);
+        res.status(500).send("Error occurred while inserting exam record.");
+    } else {
+        res.status(200).send("exam record inserted successfully.");
+    }
+  })
 });
   
-app.delete("/api/deleteexams/:id", (req, res) => {
-    const id = req.params.id;
-    const sqlDelete = "DELETE FROM exams WHERE id = ?";
-    
-    db.query(sqlDelete, id, (err, result) => {
-      if (err) {
-          console.log(err);
-          res.status(500).send("Error occurred while deleting exam record.");
-      } else {
-          res.status(200).send("exam record deleted successfully.");
-      }
-    });
+app.delete("/api/deleteexams/", (req, res) => {
+  const id = req.query.id; // Use req.query.id to get the ID from the request URL
+  const sqlDelete = "DELETE FROM exams WHERE id = ?";
+  
+  db.query(sqlDelete, [id], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error occurred while deleting assignment record.");
+    } else {
+      res.status(200).send("assignment record deleted successfully.");
+    }
+  });
 });
     
-app.put("/api/updateexams/:id", (req, res) => {
-    const id = req.params.id;
-    const company = req.body.company;
-    const next_deadline = req.body.next_deadline;
-    const complete = req.body.complete;
-    const sqlUpdate = "UPDATE exams SET company =?, next_deadline =?, complete=? WHERE id = ?";
+app.put("/api/updateexams/", (req, res) => {
+  const id = req.query.id;
+  const description = req.body.description;
+  const date = req.body.date;
+  const time = req.body.time;
+  const venue = req.body.venue;
+  const sqlUpdate = "UPDATE exams SET description =?, date =?, time=?, venue=? WHERE id = ?";
     
-    db.query(sqlUpdate, [company, next_deadline, complete, id], (err, result) => {
-      if (err) {
-          console.log(err);
-          res.status(500).send("Error occurred while updating exam record.");
-      } else {
-          res.status(200).send("exam record updated successfully.");
-      }
-    });
+  db.query(sqlUpdate, [description, date, time, venue, id], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error occurred while updating exam record.");
+    } else {
+      res.status(200).send("exam record updated successfully.");
+    }
+  });
 });
 
 /* JOBS */
-app.get("/api/getjobs", (req, res) => {
-    const sqlSelect = "SELECT * FROM jobs";
-    db.query(sqlSelect, (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send("Error occurred while fetching jobs record.");
-      } else {
-        console.log("Successfully fetched job record.");
-        res.status(200).send(result);
-      }
-    });
-  })
+app.get("/api/getjobs/:id", (req, res) => {
+  const userid = req.params.id;
+  const sqlSelect = "SELECT * FROM jobs WHERE userid = ?";
+  db.query(sqlSelect,[userid], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error occurred while fetching jobs record.");
+    } else {
+      console.log("Successfully fetched job record.");
+      res.status(200).send(result);
+    }
+  });
+})
   
 app.post("/api/insertjobs", (req, res) => {
-    const company = req.body.company;
-    const next_deadline = req.body.next_deadline;
-    const status = req.body.status;
-    const position = req.body.position;
-    const remarks = req.body.remarks;
-    
-    const sqlInsert = "INSERT INTO jobs (company, position, next_deadline, status, remarks) VALUES (?,?,?,?,?)"
-    db.query(sqlInsert, [company, next_deadline, status, position, remarks], (err, result) => {
-      if (err) {
-          console.log(err);
-          res.status(500).send("Error occurred while inserting job record.");
-      } else {
-          res.status(200).send("job record inserted successfully.");
-      }
-    })
+  const userid = req.body.userid;
+  const company = req.body.company;
+  const position = req.body.position;
+  const status = req.body.status;
+  const next_deadline = req.body.next_deadline;
+  const remarks = req.body.remarks;
+  
+  const sqlInsert = "INSERT INTO jobs (userid, company, position, status, next_deadline, remarks) VALUES (?,?,?,?,?,?)"
+  db.query(sqlInsert, [userid, company, position, status, next_deadline, remarks], (err, result) => {
+    if (err) {
+        console.log(err);
+        res.status(500).send("Error occurred while inserting job record.");
+    } else {
+        res.status(200).send("job record inserted successfully.");
+    }
+  })
 });
   
-app.delete("/api/deletejobs/:id", (req, res) => {
-    const id = req.params.id;
+app.delete("/api/deletejobs/", (req, res) => {
+    const id = req.query.id;
     const sqlDelete = "DELETE FROM jobs WHERE id = ?";
     
-    db.query(sqlDelete, id, (err, result) => {
+    db.query(sqlDelete, [id], (err, result) => {
       if (err) {
           console.log(err);
           res.status(500).send("Error occurred while deleting job record.");
@@ -351,61 +355,63 @@ app.delete("/api/deletejobs/:id", (req, res) => {
     });
 });
     
-app.put("/api/updatejobs/:id", (req, res) => {
-    const id = req.params.id;
-    const company = req.body.company;
-    const next_deadline = req.body.next_deadline;
-    const status = req.body.status;
-    const position = req.body.position;
-    const remarks = req.body.remarks;
-    const sqlUpdate = "UPDATE jobs SET company = ?, next_deadline = ?, status = ? position = ? remarks = ? WHERE id = ?";
-    
-    db.query(sqlUpdate, [company, next_deadline, status, position, remarks, status, id], (err, result) => {
-      if (err) {
-          console.log(err);
-          res.status(500).send("Error occurred while updating job record.");
-      } else {
-          res.status(200).send("job record updated successfully.");
-      }
-    });
+app.put("/api/updatejobs/", (req, res) => {
+  const id = req.query.id;
+  const company = req.body.company;
+  const position = req.body.position;
+  const status = req.body.status;
+  const next_deadline = req.body.next_deadline;
+  const remarks = req.body.remarks;
+  const sqlUpdate = "UPDATE jobs SET company = ?, position= ?, status = ?, next_deadline = ?, remarks = ? WHERE id = ?";
+  
+  db.query(sqlUpdate, [company, position, status, next_deadline, remarks, id], (err, result) => {
+    if (err) {
+        console.log(err);
+        res.status(500).send("Error occurred while updating job record.");
+    } else {
+        res.status(200).send("job record updated successfully.");
+    }
+  });
 });
 
 /* MODULES */
-app.get("/api/getmodules", (req, res) => {
-    const sqlSelect = "SELECT * FROM modules";
-    db.query(sqlSelect, (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send("Error occurred while fetching modules record.");
-    } else {
-      console.log("Successfully fetched module record.");
-      res.status(200).send(result);
-    }
-    });
-  })
+app.get("/api/getmodules/:id", (req, res) => {
+  const userid = req.params.id;
+  const sqlSelect = "SELECT * FROM modules WHERE userid = ?";
+  db.query(sqlSelect, [userid], (err, result) => {
+  if (err) {
+    console.log(err);
+    res.status(500).send("Error occurred while fetching modules record.");
+  } else {
+    console.log("Successfully fetched module record.");
+    res.status(200).send(result);
+  }
+  });
+})
   
   app.post("/api/insertmodules", (req, res) => {
-    const description = req.body.description;
+    const userid = req.body.userid;
     const module_code = req.body.module_code;
-    const complete = req.body.complete;
-    const year = req.body.year;
+    const description = req.body.description;
+    const type = req.body.type;
+    const mc = req.body.mc;
   
-    const sqlInsert = "INSERT INTO modules (description, module_code, complete, year) VALUES (?,?,?,?)";
-    db.query(sqlInsert, [description, module_code, complete, year], (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send("Error occurred while inserting modules record.");
-    } else {
-      res.status(200).send("modules record inserted successfully.");
-    }
+    const sqlInsert = "INSERT INTO modules (userid, module_code, description, type, mc) VALUES (?,?,?,?,?)";
+    db.query(sqlInsert, [userid, module_code, description, type, mc], (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error occurred while inserting modules record.");
+      } else {
+        res.status(200).send("modules record inserted successfully.");
+      }
     });
   });
   
-  app.delete("/api/deletemodules/:id", (req, res) => {
-    const id = req.params.id;
+  app.delete("/api/deletemodules/", (req, res) => {
+    const id = req.query.id;
     const sqlDelete = "DELETE FROM modules WHERE id = ?";
   
-    db.query(sqlDelete, id, (err, result) => {
+    db.query(sqlDelete, [id], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error occurred while deleting modules record.");
@@ -415,80 +421,20 @@ app.get("/api/getmodules", (req, res) => {
     });
   });
   
-  app.put("/api/updatemodules/:id", (req, res) => {
-    const id = req.params.id;
-    const description = req.body.description;
+  app.put("/api/updatemodules/", (req, res) => {
+    const id = req.query.id;
     const module_code = req.body.module_code;
-    const complete = req.body.complete;
-    const year = req.body.year;
-    const sqlUpdate = "UPDATE modules SET description =?, module_code =?, complete =?, year =? WHERE id = ?";
+    const description = req.body.description;
+    const type = req.body.type;
+    const mc = req.body.mc;
+    const sqlUpdate = "UPDATE modules SET module_code=?, description =?, type=?, mc=? WHERE id = ?";
   
-    db.query(sqlUpdate, [description, module_code, complete, year, id], (err, result) => {
+    db.query(sqlUpdate, [module_code, description, type, mc, id], (err, result) => {
     if (err) {
       console.log(err);
-    res.status(500).send("Error occurred while updating modules record.");
-      } else {
-    res.status(200).send("modules record updated successfully.");
-    }
-    });
-  })
-
-
-  /* LEETCODE PATTERNS */
-  app.get("/api/getleetcode", (req, res) => {
-    const sqlSelect = "SELECT * FROM leetcode";
-    db.query(sqlSelect, (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send("Error occurred while fetching leetcode record.");
-      } else {
-        console.log("Successfully fetched leetcode record.");
-        res.status(200).send(result);
+      res.status(500).send("Error occurred while updating modules record.");
+        } else {
+      res.status(200).send("modules record updated successfully.");
       }
     });
   })
-  
-  app.post("/api/insertleetcode", (req, res) => {
-    const pattern = req.body.pattern;
-    const complete = req.body.complete;
-    
-    const sqlInsert = "INSERT INTO leetcode (pattern, complete) VALUES (?,?)"
-    db.query(sqlInsert, [pattern, complete], (err, result) => {
-      if (err) {
-          console.log(err);
-          res.status(500).send("Error occurred while inserting leetcode record.");
-      } else {
-          res.status(200).send("leetcode record inserted successfully.");
-      }
-    })
-  });
-  
-  app.delete("/api/deleteleetcode/:id", (req, res) => {
-    const id = req.params.id;
-    const sqlDelete = "DELETE FROM leetcode WHERE id = ?";
-    
-    db.query(sqlDelete, id, (err, result) => {
-      if (err) {
-          console.log(err);
-          res.status(500).send("Error occurred while deleting leetcode record.");
-      } else {
-          res.status(200).send("leetcode record deleted successfully.");
-      }
-    });
-  });
-    
-  app.put("/api/updateleetcode/:id", (req, res) => {
-    const id = req.params.id;
-    const pattern = req.body.pattern;
-    const complete = req.body.complete;
-    const sqlUpdate = "UPDATE leetcode SET pattern =?, complete=? WHERE id = ?";
-    
-    db.query(sqlUpdate, [pattern, complete, id], (err, result) => {
-      if (err) {
-          console.log(err);
-          res.status(500).send("Error occurred while updating leetcode record.");
-      } else {
-          res.status(200).send("leetcode record updated successfully.");
-      }
-    });
-  });

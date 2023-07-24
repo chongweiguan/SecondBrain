@@ -15,29 +15,26 @@ import { useNavigate } from 'react-router-dom';
 import "../App.css"
 
 const HomePage = () => {
-  const [auth, setAuth] = useState(false);
-  const [id, setId] = useState('');
+  const [user, setUser] = useState(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const navigate = useNavigate();
 
   axios.defaults.withCredentials = true;
 
-  useEffect(() => {
+  const auth = () => {
     axios.get('http://localhost:3001/api/login')
       .then(res => {
-        console.log(res);
-        if(res.data.Status === "Success") {
-          setAuth(true);
-          console.log("this is the user")
-          console.log(res.data);
-          setId(res.data.id);
+        if(res.data.loggedIn) {
+          setUser(res.data.user);
         } else {
-          setAuth(false);
           navigate("/login")
         }
       })
       .catch(err => console.log(err));
+  }
 
+  useEffect(() => {
+    auth();
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 1350);
     };
@@ -55,6 +52,10 @@ const HomePage = () => {
     }).catch(err => console.log(err));
   }
 
+  if(!user) {
+    return null;
+  }
+
   return (
     <div className="black-background">
       <Banner bannerPath={banner1} logo={'👾'} />
@@ -64,7 +65,7 @@ const HomePage = () => {
             &#123; Simple Second Brain &#125;
           </h1>
           <h1 className="page-subHeader">
-            ⚓ &nbsp;&nbsp;Welcome, {id} !
+            ⚓ &nbsp;&nbsp;Welcome, {user.firstname} !
           </h1>
         </div>
         <NavBar logout={handleLogout}/>
@@ -82,7 +83,7 @@ const HomePage = () => {
           margin: '0 auto', 
         }}>
           <div>
-            <DaysCompleted/>
+            <DaysCompleted />
           </div>
           <div style={{marginTop: isSmallScreen ? '30px' : '0px'}}>
            <Weather />
@@ -107,9 +108,9 @@ const HomePage = () => {
         gap: '20px',
         flexDirection: isSmallScreen ? 'column' : 'row'
       }}>
-        <FinanceBox />
-        <AcademicBox />
-        <JobBox />
+        <FinanceBox user={user}/>
+        <AcademicBox user={user}/>
+        <JobBox user={user}/>
       </div>
       <hr className="line-break"/>
     </div>

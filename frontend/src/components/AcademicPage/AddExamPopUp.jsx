@@ -4,9 +4,12 @@ import { Button } from "@mui/material";
 import TimePicker from "../Others/TimePicker";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Calendar from "../Others/Calendar";
+import axios from "axios";
 
+const AddExamPopUp = ({ onClose, user, onAdd }) => {
 
-const AddExamPopUp = ({ onClose }) => {
+  const [exam, setExam] = useState('');
+  const [venue, setVenue] = useState('');
 
   const [selectedTime, setSelectedTime] = useState("\u00A0");
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -46,6 +49,27 @@ const AddExamPopUp = ({ onClose }) => {
     onClose(false);
   };
 
+  const handleAddExam = () => {
+    const examData = {
+      userid: user.id,
+      description: exam,
+      date: selectedDate,
+      time: selectedTime,
+      venue: venue,
+    }
+
+    axios.post(`http://localhost:3001/api/insertexams/`, examData)
+      .then(res => {
+        console.log(res.data);
+        onAdd();
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Error occurred while adding the exam")
+      });
+      onClose(false);
+  }
+
   return (
     <div className='pop-up-container' style={{
       padding: '30px 30px',
@@ -75,6 +99,7 @@ const AddExamPopUp = ({ onClose }) => {
           <p style={{fontSize:'18px', fontWeight: '520'}}>{'Exam\u00A0'}</p>
           <input
             type="text" name="" required className="inputField" style={{width: '420px', height: '35px', fontSize: '17px'}}
+            onChange={e => setExam(e.target.value)}
           />
         </div>
         <div style={{display: 'flex', gap: '20px', padding: '0px 0px 25px 0px'}}>
@@ -105,7 +130,7 @@ const AddExamPopUp = ({ onClose }) => {
               <CalendarMonthIcon sx={{fontSize:'17px'}}/>
             </Button>
             {showDatePicker && (
-              <div className='pop-up-overlay' onClick={handleCloseDatePicker}>
+              <div className='pop-up-overlay'>
                 <div
                 style={{
                   position: "absolute",
@@ -169,9 +194,10 @@ const AddExamPopUp = ({ onClose }) => {
               alignItems: 'center',
               width: '490px' 
             }}>
-            <p style={{fontSize:'18px', fontWeight: '520', fontSize: '17px'}}>Venue</p>
+            <p style={{fontSize:'18px', fontWeight: '520'}}>Venue</p>
             <input
-            type="text" name="" required className="inputField" style={{width: '250px', height: '35px', borderRadius: '5px'}}
+            type="text" name="" required className="inputField" style={{width: '250px', height: '35px', borderRadius: '5px', fontSize: '17px'}}
+            onChange={e => setVenue(e.target.value)}
           />
           </div>
         </div>
@@ -207,7 +233,7 @@ const AddExamPopUp = ({ onClose }) => {
               backgroundColor: 'white'
             }
           }}
-          onClick={handleCancel}
+          onClick={handleAddExam}
         >Add</Button>
       </div>
     </div>

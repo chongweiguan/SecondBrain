@@ -1,11 +1,16 @@
 import {React, useState} from "react";
 import { Button } from "@mui/material";
+import axios from "axios";
 
-const AddModulePopUp = ({ onClose }) => {
+const AddModulePopUp = ({ onClose, user, onAdd }) => {
+
+  const [moduleCode, setModuleCode] = useState('');
+  const [moduleDescription, setModuleDescription] = useState('');
 
   const [showTypePicker, setTypePicker] = useState(false);
   const [selectedType, setSelectedType] = useState(null);
-  
+
+  const [mc, setMC] = useState(null);
   
   const handleShowTypePicker = () => { 
     setTypePicker(true);
@@ -94,6 +99,27 @@ const AddModulePopUp = ({ onClose }) => {
       </div>
     )
   }
+
+  const handleAddModule = () => {
+    const moduleData = {
+      userid: user.id,
+      module_code: moduleCode,
+      description: moduleDescription,
+      type: selectedType,
+      mc: mc
+    }
+
+    axios.post(`http://localhost:3001/api/insertmodules/`, moduleData)
+      .then(res => {
+        console.log(res.data);
+        onAdd();
+      })
+      .catch(err => {
+        console.log(err);
+        alert("Error occurred while adding the module")
+      });
+      onClose(false);
+  }
   
   return (
     <div className='pop-up-container' style={{
@@ -124,6 +150,7 @@ const AddModulePopUp = ({ onClose }) => {
             <p style={{fontSize:'18px', fontWeight: '520'}}>Module Code</p>
           <input
             type="text" name="" required className="inputField" style={{width: '190px', height: '35px', fontSize: '17px'}}
+            onChange={e => setModuleCode(e.target.value)}
           />
             </div>
             <div 
@@ -135,6 +162,7 @@ const AddModulePopUp = ({ onClose }) => {
             <p style={{fontSize:'18px', fontWeight: '520'}}>MC</p>
             <input
               type="text" name="" required className="inputField" style={{width: '70px', height: '35px', fontSize: '17px'}}
+              onChange={e => setMC(e.target.value)}
             />
             </div>
         </div>
@@ -148,6 +176,7 @@ const AddModulePopUp = ({ onClose }) => {
             <p style={{fontSize:'18px', fontWeight: '520'}}>{'Module Desc.'}</p>
             <input
             type="text" name="" required className="inputField" style={{width: '325px', height: '35px', fontSize: '17px'}}
+            onChange={e => setModuleDescription(e.target.value)}
             />
         </div>
         <div 
@@ -222,7 +251,7 @@ const AddModulePopUp = ({ onClose }) => {
                 backgroundColor: 'white'
             }
             }}
-            onClick={handleCancel}
+            onClick={handleAddModule}
         >Add</Button>
         </div>
     </div>

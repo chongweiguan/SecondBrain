@@ -1,5 +1,4 @@
 import {React, useEffect, useState} from 'react';
-import { jobData } from '../../data/dummy';
 import Button from "@mui/material/Button";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -7,14 +6,37 @@ import OptionsPopUp from '../Others/OptionsPopUp';
 import DeletePopUp from '../Others/DeletePopUp';
 import AddJobPopUp from './AddJobPopUp';
 import EditJobPopUp from './EditJobPopUp';
+import axios from 'axios';
 
-const JobBox = () => {
+const JobBox = ({user}) => {
+  const [jobData, setJobData] = useState(null)
+
   const [showOptionsPopUp, setShowOptionsPopUp] = useState(false);
   const [popUpPosition, setPopUpPosition] = useState({ x: 0, y: 0 });
 
   const [showAddJobPopUp, setShowAddJobPopUp] = useState(false);
   const [showEditJobPopUp, setShowEditJobPopUp] = useState(false);
-  const [showDeleteJobPopUp, setShowDeleteJobPopUp] = useState(false); 
+  const [showDeleteJobPopUp, setShowDeleteJobPopUp] = useState(false);
+  
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const getJobData = async () => {
+    try {
+      axios.get(`http://localhost:3001/api/getjobs/${user.id}`)
+        .then(res => {
+          setJobData(res.data);
+        })
+    } catch (err) {
+      console.error(err);
+      alert("Error occurred fetching assignment Data")
+    }
+  }
+
+  useEffect(() => {
+    if (user && user.id) {
+      getJobData();
+    }
+  }, [user]);
 
   const handleShowOptionsPopUp = (event) => {
     const x = event.clientX - 10;
@@ -86,9 +108,9 @@ const JobBox = () => {
         <div className="scroll-container-element" style={{width: '200px', color: '#a3a3a3'}}>Remarks</div>
         <div className="scroll-container-element" style={{width: '80px', color: '#a3a3a3'}}></div>
       </div>
-      {jobData && jobData.map(item => (
+      {jobData && jobData.map((item, idx) => (
         <div key={item.id} className="scroll-container-element-container">
-        <div className="scroll-container-element" style={{width: '60px'}}>{item.id}</div>
+        <div className="scroll-container-element" style={{width: '60px'}}>{idx+1}</div>
         <div className="scroll-container-element" style={{width: '200px'}}>{item.company}</div>
         <div className="scroll-container-element" style={{width: '280px'}}>{item.position}</div>
         <div className="scroll-container-element" style={{width: '170px'}}>{item.status}</div>
@@ -104,7 +126,10 @@ const JobBox = () => {
               backgroundColor: '#333333'
             }
           }}
-          onClick={(event) => handleShowOptionsPopUp(event)}
+          onClick={(event) => {
+            handleShowOptionsPopUp(event)
+            setSelectedItem(item)
+          }}
         >
           <MoreHorizIcon 
             sx={{
@@ -120,7 +145,7 @@ const JobBox = () => {
         <div className='pop-up-overlay'>
           <div className="pop-up-background" onClick={handlePopUpClose}/>
           <div className="pop-up-content">
-            <AddJobPopUp onClose={setShowAddJobPopUp}/> 
+            <AddJobPopUp onClose={setShowAddJobPopUp} user={user} onAdd={getJobData}/> 
           </div>
         </div> 
       )}
@@ -135,7 +160,7 @@ const JobBox = () => {
       <div className="pop-up-overlay">
         <div className="pop-up-background" onClick={handlePopUpClose} />
         <div className="pop-up-content">
-          <DeletePopUp onClose={setShowDeleteJobPopUp} />
+          <DeletePopUp onClose={setShowDeleteJobPopUp} item={selectedItem} onDelete={getJobData} type='jobs'/>
         </div>
       </div>
     )}
@@ -143,7 +168,7 @@ const JobBox = () => {
       <div className="pop-up-overlay">
         <div className="pop-up-background" onClick={handlePopUpClose} />
         <div className="pop-up-content">
-          <EditJobPopUp onClose={setShowEditJobPopUp} />
+          <EditJobPopUp onClose={setShowEditJobPopUp} item={selectedItem} onEdit={getJobData}/>
         </div>
       </div>
     )}

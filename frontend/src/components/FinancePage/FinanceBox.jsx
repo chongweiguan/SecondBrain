@@ -1,5 +1,4 @@
 import {React, useEffect, useState} from 'react';
-import { financeData } from '../../data/dummy';
 import Button from "@mui/material/Button";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -9,13 +8,16 @@ import AddExpensesPopUp from './AddExpensesPopUp';
 import EditExpensesPopUp from './EditExpensesPopUp';
 import { formatDateTime } from '../../utils/DateTimeParser';
 
-const FinanceBox = () => {
+const FinanceBox = ({user, financeData, getData}) => {
+
   const [showOptionsPopUp, setShowOptionsPopUp] = useState(false);
   const [popUpPosition, setPopUpPosition] = useState({ x: 0, y: 0 });
 
   const [showAddExpensePopUp, setShowAddExpensePopUp] = useState(false);
   const [showEditExpensePopUp, setShowEditExpensePopUp] = useState(false);
   const [showDeleteExpensePopUp, setShowDeleteExpensePopUp] = useState(false); 
+
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const handleShowOptionsPopUp = (event) => {
     const x = event.clientX - 10;
@@ -85,12 +87,12 @@ const FinanceBox = () => {
         <div className="scroll-container-element" style={{width: '170px', color: '#a3a3a3', fontSize: '16px'}}>Date</div>
         <div className="scroll-container-element" style={{width: '80px', color: '#a3a3a3', fontSize: '16px'}}></div>
       </div>
-      {financeData && financeData.map(item => (
+      {financeData && financeData.map((item, idx) => (
         <div key={item.id} className="scroll-container-element-container">
-        <div className="scroll-container-element" style={{width: '60px', fontSize: '16px'}}>{item.id}</div>
+        <div className="scroll-container-element" style={{width: '60px', fontSize: '16px'}}>{idx+1}</div>
         <div className="scroll-container-element" style={{width: '350px', fontSize: '16px'}}>{item.description}</div>
-        <div className="scroll-container-element" style={{width: '150px', fontSize: '16px', fontWeight: '600', color: item.amount.startsWith('-') ? 'red' : 'lime'}}>SGD {item.amount}</div>
-        <div className="scroll-container-element" style={{width: '170px', fontSize: '16px'}}>{formatDateTime(item.dateTime)}</div>
+        <div className="scroll-container-element" style={{width: '150px', fontSize: '16px', fontWeight: '600', color: item.amount < 0 ? 'red' : 'lime'}}>SGD {item.amount}</div>
+        <div className="scroll-container-element" style={{width: '170px', fontSize: '16px'}}>{item.date}</div>
         <div className="scroll-container-element" style={{width: '80px', justifyContent: 'center'}}>
         <Button
           sx={{
@@ -101,7 +103,10 @@ const FinanceBox = () => {
               backgroundColor: '#333333'
             }
           }}
-          onClick={(event) => handleShowOptionsPopUp(event)}
+          onClick={(event) => {
+            handleShowOptionsPopUp(event)
+            setSelectedItem(item)
+          }}
         >
           <MoreHorizIcon 
             sx={{
@@ -124,7 +129,7 @@ const FinanceBox = () => {
       <div className="pop-up-overlay">
         <div className="pop-up-background" onClick={handlePopUpClose} />
         <div className="pop-up-content">
-          <DeletePopUp onClose={setShowDeleteExpensePopUp} />
+          <DeletePopUp onClose={setShowDeleteExpensePopUp} item={selectedItem} onDelete={getData} type='finance'/>
         </div>
       </div>
     )}
@@ -132,7 +137,7 @@ const FinanceBox = () => {
         <div className="pop-up-overlay">
           <div className="pop-up-background" onClick={handlePopUpClose} />
           <div className="pop-up-content">
-            <AddExpensesPopUp onClose={setShowAddExpensePopUp} />
+            <AddExpensesPopUp onClose={setShowAddExpensePopUp} user={user} onAdd={getData} />
           </div>
         </div>
       )}
@@ -140,7 +145,7 @@ const FinanceBox = () => {
       <div className="pop-up-overlay">
         <div className="pop-up-background" onClick={handlePopUpClose} />
         <div className="pop-up-content">
-          <EditExpensesPopUp onClose={setShowEditExpensePopUp} />
+          <EditExpensesPopUp onClose={setShowEditExpensePopUp} item={selectedItem} onEdit={getData}/>
         </div>
       </div>
     )}

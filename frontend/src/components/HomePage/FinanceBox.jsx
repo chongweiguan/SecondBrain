@@ -1,19 +1,20 @@
-import React from "react"
+import { React, useState, useEffect } from 'react';
 import { Link } from "react-router-dom"
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement } from 'chart.js';
 import { financeData } from "../../data/dummy";
 import { formatDateTime } from "../../utils/DateTimeParser";
-
+import axios from 'axios';
+import dayjs from 'dayjs';
 
 Chart.register(ArcElement);
 
-const DonutChart = () => {
+const DonutChart = ({ percentage }) => {
   const data = {
     labels: ['Data 1', 'Data 2'],
     datasets: [
     {
-      data: [90, 10],
+      data: [percentage, 100 - percentage],
       backgroundColor: ['white', 'black'],
       borderWidth: 0,
     },
@@ -62,23 +63,87 @@ const DonutChart = () => {
   return (
     <div style={containerStyle}>
     <Doughnut data={data} options={options}/>
-    <div style={percentageStyle}>85%</div>
+    <div style={percentageStyle}>{percentage}%</div>
     <div style={used}>used</div>
     </div>
   );
 };
 
-const FinanceBox = () => {
+const FinanceBox = ({ user }) => {
+
+  const [financeData, setFinanceData] = useState(null);
+  const [filteredFinanceData, setFilteredFinanceData] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [formattedPeriod, setFormattedPeriod] = useState('');
+
+  const getFinanceData = async () => {
+    try {
+      axios.get(`http://localhost:3001/api/getfinance/${user.id}`)
+        .then(res => {
+          setFinanceData(res.data);
+        })
+    } catch (err) {
+      console.error(err);
+      alert("Error occurred fetching finance Data")
+    }
+  }
+
+  const totalSpent = filteredFinanceData
+  ? filteredFinanceData.reduce(
+      (sum, item) => item.amount < 0 ? sum - parseFloat(item.amount) : sum,
+      0
+    ).toFixed(2)
+  : 0;
+
+  // Define the total budget
+  const totalBudget = 800;
+
+  // Calculate the percentage spent
+  const percentageSpent = ((totalSpent / totalBudget) * 100).toFixed(2);
+
+  const filterDataByMonth = (month) => {
+    if (!financeData) return null;
+
+    const filteredData = financeData.filter((item) => {
+      // Assuming the date field is stored as 'date' in the financeData
+      const dateString = item.date;
+      const dateObject = new Date(dateString);
+      const itemMonth = dateObject.getMonth() + 1; // JavaScript months are 0-indexed (0 to 11)
+      return itemMonth === month;
+    });
+
+    return filteredData;
+  };
+
+  useEffect(() => {
+    if (user && user.id) {
+      getFinanceData();
+      const currentMonth = dayjs().month()+1;
+      setSelectedMonth(currentMonth);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    // Check if financeData and selectedMonth are available before filtering
+    if (financeData && selectedMonth) {
+      const currentMonthData = filterDataByMonth(selectedMonth);
+      setFilteredFinanceData(currentMonthData);
+      const startOfMonth = dayjs().month(selectedMonth - 1).startOf('month').format('D MMM YYYY');
+      const endOfMonth = dayjs().month(selectedMonth - 1).endOf('month').format('D MMM YYYY');
+      setFormattedPeriod(`${startOfMonth} - ${endOfMonth}`);
+    }
+  }, [financeData, selectedMonth]);
+
   return (
     <div className="home-page-box-container">
     <header className="home-page-box-header">
       <Link to="/finance">💵 Finance</Link>
     </header>
     <div style={{display:'flex'}}>
-      <DonutChart />
-      <div style={{ display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center', marginLeft: '10px'}}>
-      <p style={{fontSize: '13px'}}>1 May 2023 - 31 May 2023</p>
-      <p style={{fontSize: '50px', fontWeight:'500'}}>$678.14</p>
+      <DonutChart percentage={percentageSpent}/>
+      <div style={{ display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center', marginLeft: '10px', width: '200px'}}>
+      <p style={{fontSize: '13px'}}>{formattedPeriod}</p>
+      <p style={{fontSize: '50px', fontWeight:'500'}}>${totalSpent}</p>
       <p style={{fontSize: '16px', fontWeight:'500'}}>out of $800</p>
       </div>
     </div>
@@ -87,11 +152,11 @@ const FinanceBox = () => {
       height: '270px',
       width: '405px'
     }}>
-      {financeData && financeData.map(item => (
+      {filteredFinanceData && filteredFinanceData.map(item => (
         <div style={{display:'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0px 8px 10px'}}>
         <div>
           <p style={{fontSize: '16px'}}>{item.description}</p>
-            <p style={{color: '#A1A1A1', fontSize: '12px'}}>{formatDateTime(item.dateTime)}</p>
+            <p style={{color: '#A1A1A1', fontSize: '12px'}}>{item.date}</p>
           </div>
           <p style={{color:'red', fontSize: '14px', fontWeight: '600'}}>SGD -11.60</p>
         </div>

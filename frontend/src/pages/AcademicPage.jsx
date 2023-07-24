@@ -12,23 +12,24 @@ import axios from 'axios';
 const AcademicPage = () => {
 
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [auth, setAuth] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
-  useEffect(() => {
-    axios.get('http://localhost:3001/api')
+  const auth = () => {
+    axios.get('http://localhost:3001/api/login')
       .then(res => {
-        console.log(res);
-        if(res.data.Status === "Success") {
-          setAuth(true);
-          setId(res.data.id);
+        if(res.data.loggedIn) {
+          setUser(res.data.user);
         } else {
-          setAuth(false);
           navigate("/login")
         }
       })
       .catch(err => console.log(err));
+  }
+
+  useEffect(() => {
+    auth();
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 1350);
     };
@@ -44,6 +45,10 @@ const AcademicPage = () => {
     .then(res => {
       location.reload(true);
     }).catch(err => console.log(err));
+  }
+
+  if(!user) {
+    return null;
   }
 
   return (
@@ -76,12 +81,11 @@ const AcademicPage = () => {
           </p>
         </div>
         <div style={{padding: '50px 10px 60px 10px', display: 'flex', flexDirection: isSmallScreen ? 'column' : 'row', justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
-          <AssignmentBox />
-          <ExamBox />
+          <AssignmentBox user={user}/>
+          <ExamBox user={user}/>
         </div>
         <div style={{padding: '0px 10px 80px 10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', flexDirection: isSmallScreen ? 'column' : 'row'}}>
-          <ModuleBox />
-          <ModuleProgress />
+          <ModuleBox user={user}/>
         </div>
     </div>
   )

@@ -7,17 +7,36 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import OptionsPopUp from '../Others/OptionsPopUp';
 import EditExamPopUp from './EditExamPopUp';
 import DeletePopUp from '../Others/DeletePopUp';
+import axios from 'axios';
 
-const ExamBox = () => {
+const ExamBox = ({user}) => {
+
+  const [examData, setExamData] = useState(null)
 
   const [showOptionsPopUp, setShowOptionsPopUp] = useState(false);
   const [popUpPosition, setPopUpPosition] = useState({ x: 0, y: 0 });
-
   const [showAddExamPopUp, setShowAddExamPopUp] = useState(false);
-
   const [showEditExamPopUp, setShowEditExamPopUp] = useState(false);
-
   const [showDeleteExamPopUp, setShowDeleteExamPopUp] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const getExamData = async () => {
+    try {
+      axios.get(`http://localhost:3001/api/getexams/${user.id}`)
+        .then(res => {
+          setExamData(res.data);
+        })
+    } catch (err) {
+      console.error(err);
+      alert("Error occurred fetching exam data")
+    }
+  }
+
+  useEffect(() => {
+    if (user && user.id) {
+      getExamData();
+    }
+  }, [user]);
 
   //options pop up functions
   const handleShowOptionsPopUp = (event) => {
@@ -84,17 +103,17 @@ const ExamBox = () => {
     </div>
     <div className="scroll-container" style={{height: '400px', width: '100%'}}>
     <div className='scroll-container-element-container'>
-      <div className="scroll-container-element" style={{width: '100px', color: '#a3a3a3'}}>ID</div>
-      <div className="scroll-container-element" style={{width: '300px', color: '#a3a3a3'}}>Exam</div>
-      <div className="scroll-container-element" style={{width: '250px', color: '#a3a3a3'}}>Date</div>
+      <div className="scroll-container-element" style={{width: '50px', color: '#a3a3a3'}}>ID</div>
+      <div className="scroll-container-element" style={{width: '250px', color: '#a3a3a3'}}>Exam</div>
+      <div className="scroll-container-element" style={{width: '300px', color: '#a3a3a3'}}>Date</div>
       <div className="scroll-container-element" style={{width: '100px', color: '#a3a3a3'}}>Venue</div>
       <div className="scroll-container-element" style={{width: '50px', color: '#a3a3a3'}}></div>
     </div>
-    {examsData && examsData.map(item => (
+    {examData && examData.map((item, idx) => (
       <div key={item.id} className="scroll-container-element-container">
-      <div className="scroll-container-element" style={{width: '100px'}}>{item.id}</div>
-      <div className="scroll-container-element" style={{width: '300px'}}>{item.description}</div>
-      <div className="scroll-container-element" style={{width: '250px'}}>{item.dateTime}</div>
+      <div className="scroll-container-element" style={{width: '50px'}}>{idx + 1}</div>
+      <div className="scroll-container-element" style={{width: '250px'}}>{item.description}</div>
+      <div className="scroll-container-element" style={{width: '300px'}}><p style={{fontSize: '13px'}}>{item.date} {item.time}</p></div>
       <div className="scroll-container-element" style={{width: '100px', justifyContent: 'center'}}>{item.venue}</div>
       <div className="scroll-container-element" style={{width: '50px', justifyContent: 'center'}}>
         <Button
@@ -105,7 +124,10 @@ const ExamBox = () => {
               backgroundColor: '#333333'
             }
           }}
-          onClick={(event) => handleShowOptionsPopUp(event)}
+          onClick={(event) => {
+            handleShowOptionsPopUp(event)
+            setSelectedItem(item)
+          }}
         >
           <MoreHorizIcon 
             sx={{
@@ -127,7 +149,7 @@ const ExamBox = () => {
       <div className='pop-up-overlay'>
         <div className="pop-up-background" onClick={handlePopUpClose}/>
         <div className="pop-up-content">
-          <AddExamPopUp onClose={setShowAddExamPopUp}/> 
+          <AddExamPopUp onClose={setShowAddExamPopUp} user={user} onAdd={getExamData}/> 
         </div>
       </div> 
     )}
@@ -135,7 +157,7 @@ const ExamBox = () => {
       <div className="pop-up-overlay">
         <div className="pop-up-background" onClick={handlePopUpClose} />
         <div className="pop-up-content">
-          <EditExamPopUp onClose={setShowEditExamPopUp} />
+          <EditExamPopUp onClose={setShowEditExamPopUp} item={selectedItem} onEdit={getExamData}/>
         </div>
       </div>
     )}
@@ -143,7 +165,7 @@ const ExamBox = () => {
       <div className="pop-up-overlay">
         <div className="pop-up-background" onClick={handlePopUpClose} />
         <div className="pop-up-content">
-          <DeletePopUp onClose={setShowDeleteExamPopUp} />
+          <DeletePopUp onClose={setShowDeleteExamPopUp} item={selectedItem} onDelete={getExamData} type='exams'/>
         </div>
       </div>
     )}

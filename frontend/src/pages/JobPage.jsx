@@ -9,24 +9,26 @@ import axios from 'axios';
 
 const JobPage = () => {
   
+  const [user, setUser] = useState(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [auth, setAuth] = useState(false);
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
-  useEffect(() => {
-    axios.get('http://localhost:3001/api')
+  const auth = () => {
+    axios.get('http://localhost:3001/api/login')
       .then(res => {
         console.log(res);
-        if(res.data.Status === "Success") {
-          setAuth(true);
-          setId(res.data.id);
+        if(res.data.loggedIn) {
+          setUser(res.data.user);
         } else {
-          setAuth(false);
           navigate("/login")
         }
       })
       .catch(err => console.log(err));
+  }
+
+  useEffect(() => {
+    auth();
 
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 1350);
@@ -62,7 +64,7 @@ const JobPage = () => {
         <hr className="line-break" />
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center' , gap: '50px'}}>
           <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '0px 0px 30px 0px'}}>
-          <LeetCodeBox />
+          <LeetCodeBox user={user}/>
           </div>
           <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '300px', width: '500px'}}>
             <p style={{fontSize: '30px', fontStyle: 'italic'}}>"He who climbs the ladder must</p>
@@ -71,7 +73,7 @@ const JobPage = () => {
         </div>
         <div>
           <div style={{padding: '50px', display: 'flex', justifyContent: 'center'}}>
-            <JobBox />
+            <JobBox user={user}/>
           </div>
         </div>
     </div>
