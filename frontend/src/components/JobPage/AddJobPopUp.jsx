@@ -42,7 +42,7 @@ const AddJobPopUp = ({ onClose, user, onAdd }) => {
       remarks: remarks
     }
 
-    axios.post(`http://localhost:3001/api/insertjobs/`, jobData)
+    axios.post(`https://second-brain-iab6.onrender.com/api/insertjobs/`, jobData)
       .then(res => {
         console.log(res.data);
         onAdd();

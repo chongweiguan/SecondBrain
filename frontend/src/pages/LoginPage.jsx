@@ -20,7 +20,7 @@ const LoginPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()  
-    axios.post('http://localhost:3001/api/login', values)
+    axios.post('https://second-brain-iab6.onrender.com/api/login', values)
     .then(res => {
       if(res.data) {
         navigate("/");

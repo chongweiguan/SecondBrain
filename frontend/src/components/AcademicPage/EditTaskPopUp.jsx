@@ -25,7 +25,7 @@ const EditTaskPopUp = ({ onClose, item, onEdit }) => {
       time: selectedTime,
     }
 
-    axios.put(`http://localhost:3001/api/updateassignments/?id=${id}`, assignmentData)
+    axios.put(`https://second-brain-iab6.onrender.com/api/updateassignments/?id=${id}`, assignmentData)
       .then(res => {
         console.log(res.data);
         onEdit();

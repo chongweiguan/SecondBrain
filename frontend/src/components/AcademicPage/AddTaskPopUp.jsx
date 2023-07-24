@@ -58,7 +58,7 @@ const AddTaskPopUp = ({ user, onClose, onAdd}) => {
       complete: false,
     }
 
-    axios.post(`http://localhost:3001/api/insertassignments/`, assignmentData)
+    axios.post(`https://second-brain-iab6.onrender.com/api/insertassignments/`, assignmentData)
       .then(res => {
         console.log(res.data);
         onAdd();

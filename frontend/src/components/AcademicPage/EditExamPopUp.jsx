@@ -26,7 +26,7 @@ const EditExamPopUp = ({ onClose, item, onEdit }) => {
       venue: venue
     }
 
-    axios.put(`http://localhost:3001/api/updateexams/?id=${id}`, examData)
+    axios.put(`https://second-brain-iab6.onrender.com/api/updateexams/?id=${id}`, examData)
       .then(res => {
         console.log(res.data);
         onEdit();

@@ -9,7 +9,7 @@ const AcademicBox = ({ user }) => {
 
   const getAssignmentData = async () => {
     try {
-      axios.get(`http://localhost:3001/api/getassignments/${user.id}`)
+      axios.get(`https://second-brain-iab6.onrender.com/api/getassignments/${user.id}`)
         .then(res => {
           setAssignmentData(res.data);
         })
@@ -21,7 +21,7 @@ const AcademicBox = ({ user }) => {
 
   const getExamData = async () => {
     try {
-      axios.get(`http://localhost:3001/api/getexams/${user.id}`)
+      axios.get(`https://second-brain-iab6.onrender.com/api/getexams/${user.id}`)
         .then(res => {
           setExamData(res.data);
         })

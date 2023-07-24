@@ -58,7 +58,7 @@ const AddExamPopUp = ({ onClose, user, onAdd }) => {
       venue: venue,
     }
 
-    axios.post(`http://localhost:3001/api/insertexams/`, examData)
+    axios.post(`https://second-brain-iab6.onrender.com/api/insertexams/`, examData)
       .then(res => {
         console.log(res.data);
         onAdd();

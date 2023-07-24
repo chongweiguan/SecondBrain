@@ -15,7 +15,7 @@ const JobPage = () => {
   axios.defaults.withCredentials = true;
 
   const auth = () => {
-    axios.get('http://localhost:3001/api/login')
+    axios.get('https://second-brain-iab6.onrender.com/api/login')
       .then(res => {
         console.log(res);
         if(res.data.loggedIn) {
@@ -41,7 +41,7 @@ const JobPage = () => {
   }, []);
 
   const handleLogout = () => {
-    axios.get('http://localhost:3001/api/logout')
+    axios.get('https://second-brain-iab6.onrender.com/api/logout')
     .then(res => {
       location.reload(true);
     }).catch(err => console.log(err));

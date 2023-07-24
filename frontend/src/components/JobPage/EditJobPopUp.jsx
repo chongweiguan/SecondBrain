@@ -22,7 +22,7 @@ const EditJobPopUp = ({ onClose, item, onEdit }) => {
       next_deadline: selectedDate,
       remarks: remarks
     }
-    axios.put(`http://localhost:3001/api/updatejobs/?id=${id}`, jobData)
+    axios.put(`https://second-brain-iab6.onrender.com/api/updatejobs/?id=${id}`, jobData)
       .then(res => {
         console.log(res.data);
         onEdit();

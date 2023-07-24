@@ -78,7 +78,7 @@ const FinanceBox = ({ user }) => {
 
   const getFinanceData = async () => {
     try {
-      axios.get(`http://localhost:3001/api/getfinance/${user.id}`)
+      axios.get(`https://second-brain-iab6.onrender.com/api/getfinance/${user.id}`)
         .then(res => {
           setFinanceData(res.data);
         })

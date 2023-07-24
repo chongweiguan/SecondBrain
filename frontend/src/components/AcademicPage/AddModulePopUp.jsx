@@ -109,7 +109,7 @@ const AddModulePopUp = ({ onClose, user, onAdd }) => {
       mc: mc
     }
 
-    axios.post(`http://localhost:3001/api/insertmodules/`, moduleData)
+    axios.post(`https://second-brain-iab6.onrender.com/api/insertmodules/`, moduleData)
       .then(res => {
         console.log(res.data);
         onAdd();

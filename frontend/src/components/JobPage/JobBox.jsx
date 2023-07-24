@@ -22,7 +22,7 @@ const JobBox = ({user}) => {
 
   const getJobData = async () => {
     try {
-      axios.get(`http://localhost:3001/api/getjobs/${user.id}`)
+      axios.get(`https://second-brain-iab6.onrender.com/api/getjobs/${user.id}`)
         .then(res => {
           setJobData(res.data);
         })

@@ -23,7 +23,7 @@ const ModuleBox = ({user}) => {
 
     const getModuleData = async () => {
       try {
-        axios.get(`http://localhost:3001/api/getmodules/${user.id}`)
+        axios.get(`https://second-brain-iab6.onrender.com/api/getmodules/${user.id}`)
           .then(res => {
             setModuleData(res.data);
           })

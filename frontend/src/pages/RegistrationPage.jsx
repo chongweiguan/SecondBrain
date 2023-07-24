@@ -22,7 +22,7 @@ const RegistrationPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()  
-    axios.post('http://localhost:3001/api/register', values)
+    axios.post('https://second-brain-iab6.onrender.com/api/register', values)
     .then(res => {
       if(res.data.Status === "Success") {
         navigate("/login");

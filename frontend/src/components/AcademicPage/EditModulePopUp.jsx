@@ -109,7 +109,7 @@ const EditModulePopUp = ({ onClose, item, onEdit }) => {
       mc: mc
     }
 
-    axios.put(`http://localhost:3001/api/updatemodules/?id=${id}`, moduleData)
+    axios.put(`https://second-brain-iab6.onrender.com/api/updatemodules/?id=${id}`, moduleData)
       .then(res => {
         console.log(res.data);
         onEdit();

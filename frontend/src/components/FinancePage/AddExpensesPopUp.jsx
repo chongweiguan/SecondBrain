@@ -41,7 +41,7 @@ const AddExpensesPopUp = ({ onClose, user, onAdd }) => {
       date: selectedDate,
     }
 
-    axios.post(`http://localhost:3001/api/insertfinance/`, financeData)
+    axios.post(`https://second-brain-iab6.onrender.com/api/insertfinance/`, financeData)
       .then(res => {
         console.log(res.data);
         onAdd();

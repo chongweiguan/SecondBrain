@@ -23,7 +23,7 @@ const EditExpensesPopUp = ({ onClose, item, onEdit }) => {
       date: selectedDate
     }
 
-    axios.put(`http://localhost:3001/api/updatefinance/?id=${id}`, expenseData)
+    axios.put(`https://second-brain-iab6.onrender.com/api/updatefinance/?id=${id}`, expenseData)
       .then(res => {
         console.log(res.data);
         onEdit();

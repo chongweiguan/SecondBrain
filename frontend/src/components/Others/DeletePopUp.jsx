@@ -10,7 +10,7 @@ const DeletePopUp = ({onClose, onDelete, item, type}) => {
 
   const handleDelete = () => {
     const id = item.id;
-    axios.delete(`http://localhost:3001/api/delete${type}/?id=${id}`) // Pass the ID in the URL as a query parameter
+    axios.delete(`https://second-brain-iab6.onrender.com/api/delete${type}/?id=${id}`) // Pass the ID in the URL as a query parameter
       .then(res => {
         console.log(res.data);
         onDelete();
