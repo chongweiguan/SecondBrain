@@ -19,7 +19,7 @@ const ModuleProgress = ({moduleData}) => {
     .reduce((acc, module) => acc + module.mc, 0);
 
   const breadthDepthTotalMC = moduleData
-    .filter((module) => module.type === 'Breadth & Depth')
+    .filter((module) => module.type === 'Depth & Breadth')
     .reduce((acc, module) => acc + module.mc, 0);
 
   const coreMaxMC = 64;
