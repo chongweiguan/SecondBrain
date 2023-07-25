@@ -14,20 +14,66 @@ const app = express();
 
 const salt = 10;
 
-const db = mysql.createConnection({
+const dbConfig = {
   host: process.env.DBHOST,
   user: process.env.DBUSER,
   password: process.env.DBPASSWORD,
   database: process.env.DB
-});
+};
 
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err.message);
-    return;
+let db;
+
+function handleDisconnect() {
+  // Close the current connection gracefully
+  if (db) {
+    db.end((err) => {
+      if (err) {
+        console.error('Error closing the database connection:', err.message);
+      }
+      console.log('Previous database connections closed.');
+
+      // Create a new connection
+      db = mysql.createConnection(dbConfig);
+
+      db.connect((err) => {
+        if (err) {
+          console.error('Error connecting to the database:', err.message);
+          // If the connection fails, wait for 2 seconds and try to reconnect
+          setTimeout(handleDisconnect, 2000);
+        } else {
+          console.log('Connected to the database successfully!');
+        }
+      });
+    });
+  } else {
+    // If there's no current connection, create a new one
+    db = mysql.createConnection(dbConfig);
+
+    db.connect((err) => {
+      if (err) {
+        console.error('Error connecting to the database:', err.message);
+        // If the connection fails, wait for 2 seconds and try to reconnect
+        setTimeout(handleDisconnect, 2000);
+      } else {
+        console.log('Connected to the database successfully!');
+      }
+    });
   }
-  console.log('Connected to the database successfully!');
-});
+
+  // Handle disconnection events
+  db.on('error', (err) => {
+    console.error('Database error:', err.message);
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      // If the connection is lost, attempt to reconnect
+      handleDisconnect();
+    } else {
+      throw err;
+    }
+  });
+}
+
+// Start the initial connection
+handleDisconnect();
 
 app.use(express.json());
 app.use(cors({
