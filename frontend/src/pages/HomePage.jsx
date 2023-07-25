@@ -46,7 +46,7 @@ const HomePage = () => {
   }, []);
 
   const handleLogout = () => {
-    axios.get('http://localhost:3001/api/logout', { withCredentials: true })
+    axios.get('http://second-brain-iab6.onrender.com/api/logout', { withCredentials: true })
     .then(res => {
       location.reload(true);
       navigate("/login")
