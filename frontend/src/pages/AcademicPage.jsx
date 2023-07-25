@@ -44,6 +44,7 @@ const AcademicPage = () => {
     axios.get('https://second-brain-iab6.onrender.com/api/logout', { withCredentials: true })
     .then(res => {
       location.reload(true);
+      navigate("/login")
     }).catch(err => console.log(err));
   }
 
