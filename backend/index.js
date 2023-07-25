@@ -63,12 +63,7 @@ function handleDisconnect() {
   // Handle disconnection events
   db.on('error', (err) => {
     console.error('Database error:', err.message);
-    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-      // If the connection is lost, attempt to reconnect
-      handleDisconnect();
-    } else {
-      throw err;
-    }
+    handleDisconnect();
   });
 }
 
