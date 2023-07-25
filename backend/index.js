@@ -49,7 +49,7 @@ app.use(
     proxy: true,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: 'none',
       maxAge: 1000 * 60 * 60 * 24,
       domain: '.second-brain-blue.vercel.app'
