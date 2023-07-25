@@ -87,6 +87,7 @@ app.post('/api/login', (req, res) => {
         if(err) return res.json({Error: "Password does not match"});
         if(response) {
           req.session.user = data[0];
+          console.log(data[0]);
           console.log(req.session);
           res.send(data[0]);
         } else {
@@ -100,6 +101,8 @@ app.post('/api/login', (req, res) => {
 });
 
 app.get('/api/login', (req, res) => {
+  console.log("this is req session user");
+  console.log(req.session.user);
   if (req.session.user) {
     res.send({ loggedIn: true, user: req.session.user });
   } else {
