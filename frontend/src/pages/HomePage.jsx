@@ -22,7 +22,7 @@ const HomePage = () => {
   axios.defaults.withCredentials = true;
 
   const auth = () => {
-    axios.get(`https://second-brain-iab6.onrender.com/api/login`)
+    axios.get(`https://second-brain-iab6.onrender.com/api/login`, { withCredentials: true })
       .then(res => {
         if(res.data.loggedIn) {
           setUser(res.data.user);
@@ -46,7 +46,7 @@ const HomePage = () => {
   }, []);
 
   const handleLogout = () => {
-    axios.get('http://localhost:3001/api/logout')
+    axios.get('http://localhost:3001/api/logout', { withCredentials: true })
     .then(res => {
       location.reload(true);
     }).catch(err => console.log(err));

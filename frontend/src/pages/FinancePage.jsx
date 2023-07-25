@@ -102,7 +102,7 @@ const FinancePage = () => {
 
   const auth = async () => {
     try {
-      const res = await axios.get('https://second-brain-iab6.onrender.com/api/login');
+      const res = await axios.get('https://second-brain-iab6.onrender.com/api/login', { withCredentials: true });
       console.log(res);
       if (res.data.loggedIn) {
         setUser(res.data.user);
@@ -146,7 +146,7 @@ const FinancePage = () => {
   }, [financeData, selectedMonth]);
 
   const handleLogout = () => {
-    axios.get('https://second-brain-iab6.onrender.com/api/logout')
+    axios.get('https://second-brain-iab6.onrender.com/api/logout', { withCredentials: true })
     .then(res => {
       location.reload(true);
     }).catch(err => console.log(err));

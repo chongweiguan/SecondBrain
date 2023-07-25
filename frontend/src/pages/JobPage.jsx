@@ -15,7 +15,7 @@ const JobPage = () => {
   axios.defaults.withCredentials = true;
 
   const auth = () => {
-    axios.get('https://second-brain-iab6.onrender.com/api/login')
+    axios.get('https://second-brain-iab6.onrender.com/api/login', { withCredentials: true })
       .then(res => {
         console.log(res);
         if(res.data.loggedIn) {
