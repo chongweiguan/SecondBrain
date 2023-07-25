@@ -20,7 +20,7 @@ Get an overview of all the essential information you need to keep track of. Than
 ### Finance Page
 Gain deeper insights into your expenses with detailed visuals, including a donut graph that provides a clear breakdown.
 
-<img width="1424" alt="Screenshot 2023-07-26 at 7 02 44 AM" src="https://github.com/chongweiguan/SecondBrain/assets/75872136/010cedd4-7920-43cd-ae96-c4aa45793a16">
+<img width="1423" alt="Screenshot 2023-07-26 at 7 03 25 AM" src="https://github.com/chongweiguan/SecondBrain/assets/75872136/e640a0aa-66b8-484b-ab62-5f58caf284d5">
 
 
 ### Academic Page
