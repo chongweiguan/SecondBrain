@@ -24,47 +24,44 @@ const dbConfig = {
 let db;
 
 function handleDisconnect() {
-  // Close the current connection gracefully
-  if (db) {
-    db.end((err) => {
-      if (err) {
-        console.error('Error closing the database connection:', err.message);
-      }
-      console.log('Previous database connections closed.');
+  db = mysql.createConnection(dbConfig);
 
-      // Create a new connection
-      db = mysql.createConnection(dbConfig);
-
-      db.connect((err) => {
-        if (err) {
-          console.error('Error connecting to the database:', err.message);
-          // If the connection fails, wait for 2 seconds and try to reconnect
-          setTimeout(handleDisconnect, 2000);
-        } else {
-          console.log('Connected to the database successfully!');
-        }
-      });
-    });
-  } else {
-    // If there's no current connection, create a new one
-    db = mysql.createConnection(dbConfig);
-
+  function attemptConnection() {
     db.connect((err) => {
       if (err) {
         console.error('Error connecting to the database:', err.message);
-        // If the connection fails, wait for 2 seconds and try to reconnect
-        setTimeout(handleDisconnect, 2000);
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+          // If the connection is lost, attempt to reconnect
+          setTimeout(attemptConnection, 2000);
+        } else {
+          // For other errors, close the connection and try again
+          db.end(() => {
+            console.log('Previous database connection closed due to error.');
+            setTimeout(attemptConnection, 2000);
+          });
+        }
       } else {
         console.log('Connected to the database successfully!');
       }
     });
+
+    // Handle disconnection events
+    db.on('error', (err) => {
+      console.error('Database error:', err.message);
+      if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+        // If the connection is lost, attempt to reconnect
+        attemptConnection();
+      } else {
+        // For other errors, close the connection and try again
+        db.end(() => {
+          console.log('Previous database connection closed due to error.');
+          attemptConnection();
+        });
+      }
+    });
   }
 
-  // Handle disconnection events
-  db.on('error', (err) => {
-    console.error('Database error:', err.message);
-    handleDisconnect();
-  });
+  attemptConnection();
 }
 
 // Start the initial connection
