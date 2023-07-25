@@ -49,6 +49,7 @@ const HomePage = () => {
     axios.get('http://localhost:3001/api/logout', { withCredentials: true })
     .then(res => {
       location.reload(true);
+      navigate("/login")
     }).catch(err => console.log(err));
   }
 
