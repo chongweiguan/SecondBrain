@@ -121,6 +121,7 @@ app.get('/api/login', (req, res) => {
 
 app.get('/api/logout', (req, res) => {
   res.clearCookie('id');
+  req.session.user = null;
   return res.json({Status: "Success"});
 })
 
