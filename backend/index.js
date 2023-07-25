@@ -46,6 +46,7 @@ app.use(
     resave: false,
     saveUninitialized:false,
     name: 'session',
+    proxy: true,
     cookie: {
       httpOnly: true,
       secure: true,
