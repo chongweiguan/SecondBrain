@@ -72,12 +72,7 @@ const AcademicPage = () => {
               fontWeight: '700',
               padding: '5px'
             }}>
-              AY2023/2024, Semester 1, Week 2
-          </p>
-          <p style={{
-              fontSize: '22px',
-            }}>
-              Modules: CS2102 CS2105
+              AY2023/2024, Semester 1
           </p>
         </div>
         <div style={{padding: '50px 10px 60px 10px', display: 'flex', flexDirection: isSmallScreen ? 'column' : 'row', justifyContent: 'center', alignItems: 'center', gap: '20px'}}>

@@ -52,6 +52,7 @@ app.use(
       secure: true,
       sameSite: 'none',
       maxAge: 1000 * 60 * 60 * 24,
+      domain: '.second-brain-blue.vercel.app' 
     }
   })
 );
@@ -110,8 +111,8 @@ app.post('/api/login', (req, res) => {
 });
 
 app.get('/api/login', (req, res) => {
-  console.log("this is req session user");
-  console.log(req.session.user);
+  console.log("this is req session");
+  console.log(req.session);
   if (req.session.user) {
     res.send({ loggedIn: true, user: req.session.user });
   } else {
