@@ -33,7 +33,8 @@ app.use(express.json());
 app.use(cors({
   origin: ['https://second-brain-blue.vercel.app', 'https://second-brain-git-master-chongweiguan.vercel.app', 'https://second-brain-msmdvfzqv-chongweiguan.vercel.app', 'https://second-brain-chongweiguan.vercel.app'],
   methods: ['POST', 'GET', 'DELETE', 'PUT'],
-  credentials: true
+  credentials: true,
+  exposedHeaders: ["set-cookie"],
 }));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
