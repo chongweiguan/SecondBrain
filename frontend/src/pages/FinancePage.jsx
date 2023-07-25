@@ -199,7 +199,7 @@ const FinancePage = () => {
     filteredFinanceData.forEach((item) => {
       const dateObject = dayjs(item.date);
       const weekNumber = dateObject.$W;
-      weekNumber < 5 && item.amount < 0 ? weeksData[`week${weekNumber}`] -= parseInt(item.amount) : null;
+      weekNumber < 5 && weekNumber > 0 && item.amount < 0 ? weeksData[`week${weekNumber}`] -= parseInt(item.amount) : null;
     });
 
     return weeksData;

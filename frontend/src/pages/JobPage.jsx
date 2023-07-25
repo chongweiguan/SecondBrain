@@ -54,10 +54,10 @@ const JobPage = () => {
       <div style={{display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: isSmallScreen ? 'column' : 'row'}}>
         <div>
           <h1 className="page-header">
-            &#123; Expenses & Finances &#125;
+            &#123; Jobs & Internships &#125;
           </h1>
           <h1 className="page-subHeader">
-            💰 &nbsp;&nbsp;Money, Money, Money
+            💰 &nbsp;&nbsp;Its the grind!
           </h1>
         </div>
         <NavBar logout={handleLogout}/>
