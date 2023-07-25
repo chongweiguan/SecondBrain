@@ -20,7 +20,8 @@ Get an overview of all the essential information you need to keep track of. Than
 ### Finance Page
 Gain deeper insights into your expenses with detailed visuals, including a donut graph that provides a clear breakdown.
 
-![Finance Page Screenshot](https://github.com/chongweiguan/SecondBrain/assets/75872136/0d4103cc-855d-4001-bd60-ee71499eef03)
+<img width="1424" alt="Screenshot 2023-07-26 at 7 02 44 AM" src="https://github.com/chongweiguan/SecondBrain/assets/75872136/010cedd4-7920-43cd-ae96-c4aa45793a16">
+
 
 ### Academic Page
 Stay on top of your academic journey with a comprehensive view of tasks, exams, and module progress.
