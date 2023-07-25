@@ -20,7 +20,7 @@ const LoginPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()  
-    axios.post('https://second-brain-iab6.onrender.com/api/login', values)
+    axios.post('https://second-brain-iab6.onrender.com/api/login', values, { withCredentials: true })
     .then(res => {
       if(res.data) {
         console.log(res.data);
