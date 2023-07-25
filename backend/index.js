@@ -44,6 +44,13 @@ app.use(
     secret:  process.env.JWTKEY,
     resave: false,
     saveUninitialized:false,
+    name: 'session',
+    cookie: {
+      secure: true,
+      sameSite: 'none',
+      maxAge: 1000 * 60 * 60 * 24,
+      domain: '.domain.com'
+    }
   })
 );
 
