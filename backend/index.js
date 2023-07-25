@@ -119,7 +119,7 @@ app.get('/api/login', (req, res) => {
   }
 })
 
-app.get('/api/logout/', (req, res) => {
+app.get('/api/logout', (req, res) => {
   res.clearCookie('id');
   return res.json({Status: "Success"});
 })
