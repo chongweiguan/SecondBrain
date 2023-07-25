@@ -152,7 +152,7 @@ const FinanceBox = ({ user }) => {
       height: '270px',
       width: '405px'
     }}>
-      {filteredFinanceData && filteredFinanceData.map(item => (
+      {filteredFinanceData && filteredFinanceData.slice().reverse().map(item => (
         <div style={{display:'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0px 8px 10px'}}>
         <div>
           <p style={{fontSize: '16px'}}>{item.description}</p>

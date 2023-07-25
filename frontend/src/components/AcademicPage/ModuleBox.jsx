@@ -111,7 +111,7 @@ const ModuleBox = ({user}) => {
         <div className="scroll-container-element" style={{width: '60px', color: '#a3a3a3', justifyContent: 'center'}}>MC</div>
         <div className="scroll-container-element" style={{width: '50px', color: '#a3a3a3'}}></div>
       </div>
-      {moduleData && moduleData.map((item, idx) => (
+      {moduleData && moduleData.slice().reverse().map((item, idx) => (
         <div key={item.id} className="scroll-container-element-container">
         <div className="scroll-container-element" style={{width: '60px'}}>{idx+1}</div>
         <div className="scroll-container-element" style={{width: '120px'}}>{item.module_code}</div>

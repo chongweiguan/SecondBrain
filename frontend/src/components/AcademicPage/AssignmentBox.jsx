@@ -136,7 +136,7 @@ const AssignmentBox = ({user}) => {
           <div className="scroll-container-element" style={{ width: '80px', color: '#a3a3a3' }}></div>
         </div>
         {assignmentData &&
-          assignmentData.map((item, idx) => (
+          assignmentData.slice().reverse().map((item, idx) => (
             <div key={item.id} className="scroll-container-element-container">
               <div className="scroll-container-element" style={{ width: '50px' }}>
                 {idx + 1}

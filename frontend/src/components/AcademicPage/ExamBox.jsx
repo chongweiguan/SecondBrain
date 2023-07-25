@@ -109,7 +109,7 @@ const ExamBox = ({user}) => {
       <div className="scroll-container-element" style={{width: '100px', color: '#a3a3a3'}}>Venue</div>
       <div className="scroll-container-element" style={{width: '50px', color: '#a3a3a3'}}></div>
     </div>
-    {examData && examData.map((item, idx) => (
+    {examData && examData.slice().reverse().map((item, idx) => (
       <div key={item.id} className="scroll-container-element-container">
       <div className="scroll-container-element" style={{width: '50px'}}>{idx + 1}</div>
       <div className="scroll-container-element" style={{width: '250px'}}>{item.description}</div>

@@ -87,7 +87,7 @@ const FinanceBox = ({user, financeData, getData}) => {
         <div className="scroll-container-element" style={{width: '170px', color: '#a3a3a3', fontSize: '16px'}}>Date</div>
         <div className="scroll-container-element" style={{width: '80px', color: '#a3a3a3', fontSize: '16px'}}></div>
       </div>
-      {financeData && financeData.map((item, idx) => (
+      {financeData && financeData.slice().reverse().map((item, idx) => (
         <div key={item.id} className="scroll-container-element-container">
         <div className="scroll-container-element" style={{width: '60px', fontSize: '16px'}}>{idx+1}</div>
         <div className="scroll-container-element" style={{width: '350px', fontSize: '16px'}}>{item.description}</div>

@@ -126,7 +126,7 @@ const AddExamPopUp = ({ onClose, user, onAdd }) => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-            }}>{selectedDate && <p style={{fontSize: '17px'}}>{selectedDate}</p>}
+            }}>{selectedDate && <p style={{fontSize: '16px'}}>{selectedDate}</p>}
               <CalendarMonthIcon sx={{fontSize:'17px'}}/>
             </Button>
             {showDatePicker && (

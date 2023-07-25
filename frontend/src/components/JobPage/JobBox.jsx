@@ -108,7 +108,7 @@ const JobBox = ({user}) => {
         <div className="scroll-container-element" style={{width: '200px', color: '#a3a3a3'}}>Remarks</div>
         <div className="scroll-container-element" style={{width: '80px', color: '#a3a3a3'}}></div>
       </div>
-      {jobData && jobData.map((item, idx) => (
+      {jobData && jobData.slice().reverse().map((item, idx) => (
         <div key={item.id} className="scroll-container-element-container">
         <div className="scroll-container-element" style={{width: '60px'}}>{idx+1}</div>
         <div className="scroll-container-element" style={{width: '200px'}}>{item.company}</div>

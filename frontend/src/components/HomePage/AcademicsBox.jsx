@@ -53,7 +53,7 @@ const AcademicBox = ({ user }) => {
             <div className="scroll-container-element" style={{width: '200px', color: '#a3a3a3'}}>Task</div>
             <div className="scroll-container-element" style={{width: '200px', color: '#a3a3a3'}}>Deadline</div>
           </div>
-          {assignmentData && assignmentData.map(item => (
+          {assignmentData && assignmentData.slice().reverse().map(item => (
             <div key={item.id} className="scroll-container-element-container">
               <div className="scroll-container-element" style={{width: '200px'}}>{item.description}</div>
               <div className="scroll-container-element" style={{width: '200px'}}>{item.date} {item.time}</div>
