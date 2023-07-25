@@ -5,7 +5,7 @@ Welcome to SecondBrain, a minimalist and aesthetically pleasing web application 
 ## Check it Out!
 Head over to [https://second-brain-blue.vercel.app/](https://second-brain-blue.vercel.app/) to explore the app! 
 
-🔐 If you encounter any login issues, worry not! Simply reach out to us at +65 8366 7553, and we'll swiftly restart the server to ensure you have a smooth experience.
+🔐 If you encounter any login issues, worry not! Simply reach out to me at +65 8366 7553, and I'll swiftly restart the server to ensure you have a smooth experience.
 
 ## Demo Login
 For a sneak peek into the application with populated data, feel free to use the following login information:
