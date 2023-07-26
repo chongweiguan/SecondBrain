@@ -35,12 +35,16 @@ const HomePage = () => {
 
   useEffect(() => {
     auth();
+    const interval = setInterval(() => {
+      auth();
+    }, 60000);
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 1350);
     };
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => {
+      clearInterval(interval);
       window.removeEventListener('resize', handleResize);
     };
   }, []);

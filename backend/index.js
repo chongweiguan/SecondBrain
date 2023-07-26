@@ -151,6 +151,7 @@ app.get('/api/login', (req, res) => {
   } else {
     res.send({ loggedIn: false });
   }
+  console.log('get/api/login called');
 })
 
 app.get('/api/logout', (req, res) => {
