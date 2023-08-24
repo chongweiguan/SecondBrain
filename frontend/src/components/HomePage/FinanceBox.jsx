@@ -153,7 +153,7 @@ const FinanceBox = ({ user }) => {
       width: '405px'
     }}>
       {filteredFinanceData && filteredFinanceData.slice().reverse().map(item => (
-        <div style={{display:'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0px 8px 10px'}}>
+        <div className="scroll-container-element-container" style={{display:'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0px 8px 10px'}}>
         <div>
           <p style={{fontSize: '16px'}}>{item.description}</p>
             <p style={{color: '#A1A1A1', fontSize: '12px'}}>{item.date}</p>
